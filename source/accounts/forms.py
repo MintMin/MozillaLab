@@ -4,7 +4,7 @@ from django import forms
 from django.forms import ValidationError
 from django.conf import settings
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, CustomUser
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db.models import Q
@@ -58,7 +58,6 @@ class SignInViaUsernameForm(SignIn):
         self.user_cache = user
 
         return username
-
 
 class SignInViaEmailForm(SignIn):
     email = forms.EmailField(label=_('Email'))
@@ -114,16 +113,12 @@ class StudentProfile(forms.ModelForm):
     major = forms.DropList(widget = autocomplete.ListSelect2(url='major-autocomplete'))
 
 class SignUpForm(UserCreationForm):
-    USER_CHOICES = (
-       ('Student', 'Student'),
-       ('Recruiter', 'Recruiter')
-    )
     class Meta:
-        model = User
+        model = CustomUser
         fields = settings.SIGN_UP_FIELDS
-    user_type = forms.ChoiceField(choices=USER_CHOICES, widget=forms.RadioSelect())
     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
-
+    is_student = forms.BooleanField(label=_('Is Student'), widget=forms.HiddenInput(), required=False, initial=False)
+    is_recruiter = forms.BooleanField(label=_('Is Recruiter'), widget=forms.HiddenInput(),  required=False, initial=False)
     def clean_email(self):
         email = self.cleaned_data['email']
 

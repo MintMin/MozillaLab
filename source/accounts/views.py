@@ -99,7 +99,7 @@ class LogInView(GuestOnlyView, FormView):
 
 class RecruiterSignUpView(GuestOnlyView, FormView):
     template_name = 'accounts/recruiter_sign_up.html'
-    form_class = ProfileForm
+    # form_class = RecruiterForm
     
     # def form_valid(self, form):
     #     request = self.request
