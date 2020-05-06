@@ -107,6 +107,11 @@ class SignInViaEmailOrUsernameForm(SignIn):
 
         return email_or_username
 
+class StudentProfile(forms.ModelForm):
+    class Meta:
+        model = StudentUser
+        fields = settings.STUDENT_FIELDS
+    major = forms.DropList(widget = autocomplete.ListSelect2(url='major-autocomplete'))
 
 class SignUpForm(UserCreationForm):
     USER_CHOICES = (

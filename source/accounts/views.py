@@ -28,7 +28,20 @@ from .forms import (
     ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
 )
 from .models import Activation, Profile
+from dal import autocomplete
 
+class MajorAutocompleteFromList(autocomplete.Select2ListView):
+    def get_list(self):
+        return ['Aerospace Engineering',
+                'Basket Weaving',
+                'Computer Science',
+                'Economics',
+                'Geology',
+                'Holistic Medicine',
+                'Mathematics',
+                'Mechanical Engineering',
+                'Statistics',
+                'Zoology']
 
 class GuestOnlyView(View):
     def dispatch(self, request, *args, **kwargs):
