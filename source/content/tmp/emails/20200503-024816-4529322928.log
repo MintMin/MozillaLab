@@ -1,0 +1,54 @@
+Content-Type: multipart/alternative;
+ boundary="===============3271024851843399131=="
+MIME-Version: 1.0
+Subject: Profile activation
+From: test@example.com
+To: jonathanbueff@yahoo.com
+Date: Sun, 03 May 2020 02:48:16 -0000
+Message-ID: 
+ <158847409646.96552.15323484549449177781@1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa>
+
+--===============3271024851843399131==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+
+
+To activate your profile, please follow this link:
+
+http://127.0.0.1:8080/accounts/activate/qt0e0eJR4cAaZgd3eG6N/
+
+--===============3271024851843399131==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Profile activation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+
+<p>
+    To activate your profile, please follow this link:
+</p>
+
+<p>
+    <a href="http://127.0.0.1:8080/accounts/activate/qt0e0eJR4cAaZgd3eG6N/">http://127.0.0.1:8080/accounts/activate/qt0e0eJR4cAaZgd3eG6N/</a>
+</p>
+
+</body>
+
+</html>
+
+--===============3271024851843399131==--
+
+-------------------------------------------------------------------------------
