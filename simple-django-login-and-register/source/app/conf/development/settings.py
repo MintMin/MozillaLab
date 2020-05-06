@@ -13,6 +13,8 @@ SECRET_KEY = 'NhfTvayqggTBPswCXXhWaN69HuglgZIkM'
 DEBUG = True
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
 SITE_ID = 1
 
 INSTALLED_APPS = [
