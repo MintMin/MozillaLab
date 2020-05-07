@@ -5,8 +5,8 @@
 
 {% block content %}
 	<!-- Tab links -->
-<p> Please select which type of account you want to create:</p>
-<ul class="nav nav-tabs">
+<!-- <p> Please select which type of account you want to create:</p> -->
+<!-- <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#StuAcc">Student</a></li>
   <li><a data-toggle="tab" href="#RecAcc"> &nbsp&nbsp&nbsp Recruiter</a></li>
 </ul>
@@ -16,10 +16,16 @@
     <h3>Create your student account</h3>
     <p>    
       <form method="post">
+ -->
+        <p><form method="post">
 
         {% csrf_token %}
         {% bootstrap_form form %}
 
+        <button class="btn btn-success">{% trans 'Create' %}</button>
+
+    </form></p>
+<!-- 
         <button class="btn btn-success">{% trans 'Create' %}</button>
 
     </form>
@@ -34,10 +40,10 @@
 
         <button class="btn btn-success">{% trans 'Create' %}</button>
 
-    </form></p>
-  </div>
+    </form></p> -->
+ <!--  </div>
 </div>
-
+ -->
 
 
 {% endblock %}

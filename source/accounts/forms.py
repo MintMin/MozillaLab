@@ -11,6 +11,17 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 
+from django.contrib.auth.forms import UserCreationForm
+
+'''
+Below is how we will create studentCreationForm and recruiterCreationForm
+'''
+class CustomUserCreationForm(UserCreationForm):
+
+    class Meta(UserCreationForm.Meta):
+        model = CustomUser
+        fields = UserCreationForm.Meta.fields# + ('custom_field',)
+
 class UserCacheMixin:
     user_cache = None
 
@@ -112,16 +123,13 @@ class SignInViaEmailOrUsernameForm(SignIn):
 #         fields = settings.STUDENT_FIELDS
 #     major = forms.DropList(widget = autocomplete.ListSelect2(url='major-autocomplete'))
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(CustomUserCreationForm):
     class Meta:
         model = CustomUser
         fields = settings.SIGN_UP_FIELDS
     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
-    is_student = forms.BooleanField(label=_('Is Student'), widget=forms.HiddenInput(), required=False, initial=False)
-    is_recruiter = forms.BooleanField(label=_('Is Recruiter'), widget=forms.HiddenInput(),  required=False, initial=False)
     def clean_email(self):
         email = self.cleaned_data['email']
-
         user = User.objects.filter(email__iexact=email).exists()
         if user:
             raise ValidationError(_('You can not use this email address.'))

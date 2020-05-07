@@ -19,6 +19,9 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View, FormView
 from django.conf import settings
 
+#TRY
+from .forms import CustomUserCreationForm
+
 from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
 )
@@ -107,7 +110,7 @@ class RecruiterSignUpView(GuestOnlyView, FormView):
 
 class SignUpView(GuestOnlyView, FormView):
     template_name = 'accounts/sign_up.html'
-    form_class = SignUpForm
+    form_class = CustomUserCreationForm
 
     def form_valid(self, form):
         request = self.request
