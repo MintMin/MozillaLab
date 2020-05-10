@@ -20,6 +20,7 @@
 
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
@@ -36,6 +37,8 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             {% if request.user.is_authenticated %}
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:change_password' %}">{% trans 'Change password' %}</a>
                 </li>
@@ -48,6 +51,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
                 </li>
+
+
+
+                
             {% else %}
             <div class="btn-group">
               <a href="{% url 'accounts:log_in' %}" class="btn btn-primary" role="button">Log in</a>
@@ -61,6 +68,7 @@
                   </div>
                 </div>
             </div>
+
                 <!-- <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>
                 </li>
@@ -75,14 +83,22 @@
             {% endif %}
         </ul>
 
+
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
-            </li>
-        </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
+                </li>
+            </ul>
     </div>
 
 </nav>
+
+<div class = "search">
+    <form class="example" action="{% url 'search:run_search' %}" >
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+</div>
 
 <div class="container-fluid mt-3">
 
