@@ -8,7 +8,7 @@ from main.views import IndexPageView, ChangeLanguageView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', IndexPageView.as_view(), name='index'),
+    path('', IndexPageView.as_view(), name='index'),  # home page!!!
 
     path('i18n/', include('django.conf.urls.i18n')),
     path('language/', ChangeLanguageView.as_view(), name='change_language'),

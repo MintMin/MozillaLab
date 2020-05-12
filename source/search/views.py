@@ -26,4 +26,11 @@ from django.views.generic import TemplateView
 class RunSearch(TemplateView):
     template_name = 'search/run_search.html'
 
+from django.views.generic import ListView
+from search.models import Event
 
+class EventList(ListView):
+    model = Event
+    context_object_name = 'event_list'   # your own name for the list as a template variable
+    queryset = Event.objects  # Get 5 books containing the title war
+    template_name = 'main/event_list.html'  # Specify your own template name/location
