@@ -45,12 +45,10 @@
                         <a class="dropdown-item" href="{% url 'accounts:change_password' %}">{% trans 'Change password' %}</a>
                         <a class="dropdown-item" href="{% url 'accounts:change_profile' %}">{% trans 'Change profile' %}</a>
                         <a class="dropdown-item" href="{% url 'accounts:change_email' %}">{% trans 'Change email' %}</a>
+                        <a class="dropdown-item" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
+
                     </div>
                 </div>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
-                </li>
 
                 <li class="nav-item">
                         <a class="nav-link" href="{% url 'user_profile:view_profile' %}">{% trans 'Profile' %}</a>
