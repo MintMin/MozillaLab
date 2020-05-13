@@ -13,3 +13,5 @@ source/app/conf/development/__pycache__/settings.cpython-37.pyc
 source/app/conf/development/__pycache__/settings.cpython-38.pyc
 source/main/__pycache__/__init__.cpython-37.pyc
 source/main/__pycache__/views.cpython-37.pyc
+.DS_Store
+source/.DS_Store
