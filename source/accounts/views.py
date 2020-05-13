@@ -19,6 +19,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View, FormView
 from django.conf import settings
 from django.shortcuts import render
+from django.views.generic import TemplateView
 #TRY
 from .forms import CustomUserCreationForm
 
@@ -267,6 +268,7 @@ class ResendActivationCodeView(GuestOnlyView, FormView):
         return redirect('accounts:resend_activation_code')
 
 
+    
 class RestorePasswordView(GuestOnlyView, FormView):
     template_name = 'accounts/restore_password.html'
 
@@ -285,6 +287,9 @@ class RestorePasswordView(GuestOnlyView, FormView):
         send_reset_password_email(self.request, user.email, token, uid)
 
         return redirect('accounts:restore_password_done')
+
+class AccountSettings(TemplateView):
+    template_name = 'layouts/default/account_settings.html'
 
 
 class ChangeProfileView(LoginRequiredMixin, FormView):

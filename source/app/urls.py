@@ -14,6 +14,8 @@ urlpatterns = [
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
 
     path('accounts/', include('accounts.urls')),
+    path('search/', include('search.urls')),
+
 ]
 
 if settings.DEBUG:

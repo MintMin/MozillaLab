@@ -39,19 +39,6 @@
             {% if request.user.is_authenticated %}
 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:change_password' %}">{% trans 'Change password' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:change_profile' %}">{% trans 'Change profile' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:change_email' %}">{% trans 'Change email' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
-                </li>
-
 
 
                 
@@ -63,11 +50,23 @@
                    Create an account
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'accounts:student_sign_up' %}">Student</a>
-                    <a class="dropdown-item" href="{% url 'accounts:recruiter_sign_up' %}">Recruiter</a>
+                    <a class="dropdown-item" href="{% url 'accounts:sign_up' %}">Student</a>
+                    <a class="dropdown-item" href="#">Recruiter</a>
                   </div>
                 </div>
             </div>
+
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:log_in' %}">{% trans 'Log in' %}</a>
+                </li>
+                <div class="dropdown">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Create an account
+                  </button> -->
+                  
+<!--                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:sign_up' %}">{% trans 'Create an account' %}</a>
+                </li> -->
             {% endif %}
         </ul>
 
