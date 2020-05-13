@@ -1,0 +1,15 @@
+source/accounts/__pycache__/admin.cpython-38.pyc
+source/accounts/__pycache__/forms.cpython-38.pyc
+source/accounts/__pycache__/models.cpython-38.pyc
+source/accounts/__pycache__/urls.cpython-38.pyc
+source/accounts/__pycache__/views.cpython-38.pyc
+source/accounts/migrations/__pycache__/0001_initial.cpython-38.pyc
+source/app/__pycache__/__init__.cpython-37.pyc
+source/app/__pycache__/settings.cpython-37.pyc
+source/app/__pycache__/urls.cpython-37.pyc
+source/app/conf/__pycache__/__init__.cpython-37.pyc
+source/app/conf/development/__pycache__/__init__.cpython-37.pyc
+source/app/conf/development/__pycache__/settings.cpython-37.pyc
+source/app/conf/development/__pycache__/settings.cpython-38.pyc
+source/main/__pycache__/__init__.cpython-37.pyc
+source/main/__pycache__/views.cpython-37.pyc
