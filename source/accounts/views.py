@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View, FormView
 from django.conf import settings
-
+from django.shortcuts import render
 #TRY
 from .forms import CustomUserCreationForm
 
@@ -26,24 +26,95 @@ from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
 )
 from .forms import (
-    SignInViaUsernameForm, SignInViaEmailForm, SignInViaEmailOrUsernameForm, SignUpForm, ProfileForm,
+    SignInViaUsernameForm, StudentSignUpForm, SignInViaEmailForm, SignInViaEmailOrUsernameForm,
     RestorePasswordForm, RestorePasswordViaEmailOrUsernameForm, RemindUsernameForm,
-    ResendActivationCodeForm, ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm,
-)
-from .models import Activation, Profile
+    ResendActivationCodeForm, RecruiterSignUpForm,  ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm, 
+    )
+from .models import Activation, Profile, Recruiter, Student, CustomUser
+from django.urls import reverse_lazy
 
-# class MajorAutocompleteFromList(autocomplete.Select2ListView):
-#     def get_list(self):
-#         return ['Aerospace Engineering',
-#                 'Basket Weaving',
-#                 'Computer Science',
-#                 'Economics',
-#                 'Geology',
-#                 'Holistic Medicine',
-#                 'Mathematics',
-#                 'Mechanical Engineering',
-#                 'Statistics',
-#                 'Zoology']
+
+# Michael's web page:
+from django.views.generic import CreateView
+
+
+class RecruiterSignUpView(CreateView):
+    model = CustomUser
+    form_class = RecruiterSignUpForm
+    template_name = 'accounts/recruiter_sign_up.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'recruiter'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        request = self.request
+        # Change the username to the "user_ID" form
+        if settings.DISABLE_USERNAME:
+            user.username = f'user_{user.id}'
+            user.save()
+
+        if settings.ENABLE_USER_ACTIVATION:
+            code = get_random_string(20)
+
+            act = Activation()
+            act.code = code
+            act.user = user
+            act.save()
+
+            send_activation_email(request, user.email, code)
+
+            messages.success(
+                request, _('You are signed up. To activate the account, follow the link sent to the mail.'))
+        else:
+            raw_password = form.cleaned_data['password1']
+
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+
+            messages.success(request, _('You are successfully signed up!'))
+        return redirect('index')
+
+class StudentSignUpView(CreateView):
+    model = CustomUser
+    form_class = StudentSignUpForm
+    template_name = 'accounts/student_sign_up.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        request = self.request
+        # Change the username to the "user_ID" form
+        if settings.DISABLE_USERNAME:
+            user.username = f'user_{user.id}'
+            user.save()
+
+        if settings.ENABLE_USER_ACTIVATION:
+            code = get_random_string(20)
+
+            act = Activation()
+            act.code = code
+            act.user = user
+            act.save()
+
+            send_activation_email(request, user.email, code)
+
+            messages.success(
+                request, _('You are signed up. To activate the account, follow the link sent to the mail.'))
+        else:
+            raw_password = form.cleaned_data['password1']
+
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+
+            messages.success(request, _('You are successfully signed up!'))
+        return redirect('index')
 
 class GuestOnlyView(View):
     def dispatch(self, request, *args, **kwargs):
@@ -99,14 +170,6 @@ class LogInView(GuestOnlyView, FormView):
 
         return redirect(settings.LOGIN_REDIRECT_URL)
 
-class RecruiterSignUpView(GuestOnlyView, FormView):
-    template_name = 'accounts/recruiter_sign_up.html'
-    # form_class = RecruiterForm
-    
-    # def form_valid(self, form):
-    #     request = self.request
-    #     user = form.save(commit=False)
-    #     return redirect('index')
 
 class SignUpView(GuestOnlyView, FormView):
     template_name = 'accounts/sign_up.html'

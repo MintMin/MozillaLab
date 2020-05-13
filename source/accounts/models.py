@@ -2,10 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
-USER_CHOICES = (
-   ('Student', 'Student'),
-   ('Recruiter', 'Recruiter')
-)
 
 
 class CustomUser(AbstractUser):
@@ -15,7 +11,6 @@ class CustomUser(AbstractUser):
 class Profile(models.Model): # Child of User
    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
    user_type = models.CharField(max_length=20)
-   #forms.ChoiceField(choices=USER_CHOICES, widget=forms.RadioSelect())
 
 class Activation(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -25,4 +20,9 @@ class Activation(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    school = models.CharField(max_length = 100)
     major = models.CharField(max_length=100)
+
+class Recruiter(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=True,null=True)
+    company = models.CharField(max_length = 100)

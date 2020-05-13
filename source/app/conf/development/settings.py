@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     # Vendor apps
     'bootstrap4',
+    'crispy_forms',
 
     # Application apps
     'main',
@@ -78,6 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ATOMIC_REQUESTS': True,
     }
 }
 
@@ -107,6 +109,8 @@ USE_REMEMBER_ME = True
 RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 
+RECRUITER_FIELDS = ['company'] 
+STUDENT_FIELDS = ['school'] 
 PROFILE_SIGN_UP = ['user_type','username', 'first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
 SIGN_UP_FIELDS = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
 if DISABLE_USERNAME:

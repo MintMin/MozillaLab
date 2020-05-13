@@ -4,14 +4,16 @@ from django import forms
 from django.forms import ValidationError
 from django.conf import settings
 from django.contrib.auth.models import User
-from .models import Profile, CustomUser
+from .models import Profile, CustomUser, Recruiter, Student
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
+from django.forms import ModelForm
 
 from django.contrib.auth.forms import UserCreationForm
+from django.db import transaction
 
 '''
 Below is how we will create studentCreationForm and recruiterCreationForm
@@ -20,7 +22,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = UserCreationForm.Meta.fields# + ('custom_field',)
+        fields = settings.SIGN_UP_FIELDS
 
 class UserCacheMixin:
     user_cache = None
@@ -59,7 +61,7 @@ class SignInViaUsernameForm(SignIn):
     def clean_username(self):
         username = self.cleaned_data['username']
 
-        user = User.objects.filter(username=username).first()
+        user = CustomUser.objects.filter(username=username).first()
         if not user:
             raise ValidationError(_('You entered an invalid username.'))
 
@@ -82,7 +84,7 @@ class SignInViaEmailForm(SignIn):
     def clean_email(self):
         email = self.cleaned_data['email']
 
-        user = User.objects.filter(email__iexact=email).first()
+        user = CustomCustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address.'))
 
@@ -106,7 +108,7 @@ class SignInViaEmailOrUsernameForm(SignIn):
     def clean_email_or_username(self):
         email_or_username = self.cleaned_data['email_or_username']
 
-        user = User.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
+        user = CustomCustomUser.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address or username.'))
 
@@ -117,38 +119,47 @@ class SignInViaEmailOrUsernameForm(SignIn):
 
         return email_or_username
 
-# class StudentProfile(forms.ModelForm):
-#     class Meta:
-#         model = StudentUser
-#         fields = settings.STUDENT_FIELDS
-#     major = forms.DropList(widget = autocomplete.ListSelect2(url='major-autocomplete'))
+class RecruiterSignUpForm(CustomUserCreationForm):
+    company = forms.CharField(max_length = 100)
 
-class SignUpForm(CustomUserCreationForm):
-    class Meta:
+    class Meta(CustomUserCreationForm.Meta):
         model = CustomUser
-        fields = settings.SIGN_UP_FIELDS
-    email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        user = User.objects.filter(email__iexact=email).exists()
-        if user:
-            raise ValidationError(_('You can not use this email address.'))
 
-        return email
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_recruiter = True
+        user.save()
+        recruiter = Recruiter.objects.create(user=user, company = self.cleaned_data['company'])
+        return user
 
-class ProfileForm(forms.ModelForm):
-    USER_CHOICES = (
-   ('Student', 'Student'),
-   ('Recruiter', 'Recruiter')
-)
-    class Meta:
-        model = Profile
-        fields = ['user_type']
-    user_type = forms.ChoiceField(choices=USER_CHOICES, widget=forms.RadioSelect())
+class StudentSignUpForm(CustomUserCreationForm):
+    school = forms.CharField(max_length = 100)
+    major = forms.CharField(max_length = 100)
 
-        # widgets = {
-        #     'user_type': DateInput(attrs={'type': 'date'}),
-        # }
+    class Meta(CustomUserCreationForm.Meta):
+        model = CustomUser
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_student = True
+        user.save()
+        student = Student.objects.create(user=user, major = self.cleaned_data['major'], school = self.cleaned_data['school'])
+        return user
+
+# class SignUpForm(CustomUserCreationForm):
+#     class Meta:
+#         model = CustomUser
+#         fields = settings.SIGN_UP_FIELDS
+#     email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
+#     def clean_email(self):
+#         email = self.cleaned_data['email']
+#         user = CustomUser.objects.filter(email__iexact=email).exists()
+#         if user:
+#             raise ValidationError(_('You can not use this email address.'))
+
+#         return email
 
 
 class ResendActivationCodeForm(UserCacheMixin, forms.Form):
@@ -157,7 +168,7 @@ class ResendActivationCodeForm(UserCacheMixin, forms.Form):
     def clean_email_or_username(self):
         email_or_username = self.cleaned_data['email_or_username']
 
-        user = User.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
+        user = CustomUser.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address or username.'))
 
@@ -183,7 +194,7 @@ class ResendActivationCodeViaEmailForm(UserCacheMixin, forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
 
-        user = User.objects.filter(email__iexact=email).first()
+        user = CustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address.'))
 
@@ -209,7 +220,7 @@ class RestorePasswordForm(UserCacheMixin, forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
 
-        user = User.objects.filter(email__iexact=email).first()
+        user = CustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address.'))
 
@@ -227,7 +238,7 @@ class RestorePasswordViaEmailOrUsernameForm(UserCacheMixin, forms.Form):
     def clean_email_or_username(self):
         email_or_username = self.cleaned_data['email_or_username']
 
-        user = User.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
+        user = CustomUser.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address or username.'))
 
@@ -257,7 +268,7 @@ class ChangeEmailForm(forms.Form):
         if email == self.user.email:
             raise ValidationError(_('Please enter another email.'))
 
-        user = User.objects.filter(Q(email__iexact=email) & ~Q(id=self.user.id)).exists()
+        user = CustomUser.objects.filter(Q(email__iexact=email) & ~Q(id=self.user.id)).exists()
         if user:
             raise ValidationError(_('You can not use this mail.'))
 
@@ -270,7 +281,7 @@ class RemindUsernameForm(UserCacheMixin, forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
 
-        user = User.objects.filter(email__iexact=email).first()
+        user = CustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address.'))
 
