@@ -14,6 +14,14 @@ urlpatterns = [
     path('language/', ChangeLanguageView.as_view(), name='change_language'),
 
     path('accounts/', include('accounts.urls')),
+
+    # student user
+    path('student_event/', include('student_event.urls'),name='student_event'),
+
+
+    
+    path('student_infosession/', include('student_infosession.urls'),name='student_infosession'),
+    path('student_interview/', include('student_interview.urls'), name='student_interview'),
     path('search/', include('search.urls')),
 
 ]
