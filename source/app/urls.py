@@ -17,7 +17,8 @@ urlpatterns = [
     path('search/', include('search.urls')),
     path('profile/', include('user_profile.urls')),
     path('calendar/', include('calendars.urls')),
-
+    path('infosession/', include('infosession.urls')),
+    path('interview/', include('interview.urls')),
 
 
 ]

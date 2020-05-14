@@ -35,7 +35,11 @@ INSTALLED_APPS = [
     # Application apps
     'main',
     'accounts',
-    'search'
+    'search',
+    'calendars',
+    'user_profile',
+    'interview',
+    'infosession',
 ]
 
 MIDDLEWARE = [

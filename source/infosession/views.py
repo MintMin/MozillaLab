@@ -23,8 +23,5 @@ from django.views.generic import TemplateView
 
 
 
-class RunSearch(TemplateView):
-    template_name = 'search/run_search.html'
-
-class EventView(TemplateView):
-    template_name = 'search/student_event.html'
+class ViewInfosession(TemplateView):
+    template_name = 'infosession/view_infosession.html'
