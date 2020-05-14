@@ -14,6 +14,20 @@
 
     {% endif %}
 
+    <h1>Event List</h1>
+    {% if event_list %}
+    <ul>
+      {% for event in event_list %}
+        <li>
+          <a href="{{ event.get_absolute_url }}">{{ event.title }}</a> ({{event.company}})
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>There are no event in the library.</p>
+    {% endif %}     
+    
+
     <h1>Events Dashboard</h1>
     <ul>
       <li><a href="{% url 'search:student_event' %}"> Event Example #1: Google Summer Intern </a></li>
