@@ -143,5 +143,14 @@ source/app/conf/development/__pycache__/settings.cpython-37.pyc
 source/app/conf/development/__pycache__/settings.cpython-38.pyc
 source/main/__pycache__/__init__.cpython-37.pyc
 source/main/__pycache__/views.cpython-37.pyc
+<<<<<<< HEAD
+=======
+source/calendars/__pycache__/__init__.cpython-37.pyc
+source/calendars/__pycache__/urls.cpython-37.pyc
+source/calendars/__pycache__/views.cpython-37.pyc
+source/user_profile/__pycache__/__init__.cpython-37.pyc
+source/user_profile/__pycache__/urls.cpython-37.pyc
+source/user_profile/__pycache__/views.cpython-37.pyc
+>>>>>>> origin/site_skeleton
 .DS_Store
 source/.DS_Store
