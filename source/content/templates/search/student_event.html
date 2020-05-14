@@ -28,7 +28,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand" href="/">{% trans 'Home' %}</a> 
+    <a class="navbar-brand" href="/">{% trans 'Home' %}</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault">
         <span class="navbar-toggler-icon"></span>
@@ -37,19 +37,25 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             {% if request.user.is_authenticated %}
+                <div class ="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Settings
+                    </button> 
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url 'accounts:change_password' %}">{% trans 'Change password' %}</a>
+                        <a class="dropdown-item" href="{% url 'accounts:change_profile' %}">{% trans 'Change profile' %}</a>
+                        <a class="dropdown-item" href="{% url 'accounts:change_email' %}">{% trans 'Change email' %}</a>
+                        <a class="dropdown-item" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
 
+                    </div>
+                </div>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:change_password' %}">{% trans 'Change password' %}</a>
+                        <a class="nav-link" href="{% url 'user_profile:view_profile' %}">{% trans 'Profile' %}</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:change_profile' %}">{% trans 'Change profile' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:change_email' %}">{% trans 'Change email' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
+                        <a class="nav-link" href="{% url 'calendars:view_calendar' %}">{% trans 'Calendar' %}</a>
                 </li>
 
 
@@ -85,20 +91,23 @@
 
 
         <ul class="navbar-nav">
+                <li>
+                        <div class = "search">
+                                <form class="example" action="{% url 'search:run_search' %}" >
+                                        <input type="text" placeholder="Search.." name="search">
+                                        <button type="submit"><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                        </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
                 </li>
+
             </ul>
     </div>
 
 </nav>
 
-<div class = "search">
-    <form class="example" action="{% url 'search:run_search' %}" >
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
-</div>
 
 {% block content %}
     <h1> Example #1: Google Summer Intern </h1>
@@ -114,7 +123,7 @@
     <a href="{% url 'infosession:view_infosession' %}" class="btn btn-primary" rol"add-calendar" role="buttoe="button">Join Info-session</a>
     <a href="{% url 'interview:view_interview' %}" class="btn btn-success" role="button">Schedule An Interview</a>
 <!-- </div>     -->
-    
+</div>
 
 <script src="{% static 'vendor/jquery/jquery-3.4.1.min.js' %}"></script>
 <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
