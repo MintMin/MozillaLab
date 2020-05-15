@@ -15,6 +15,9 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
+from .widgets import MonthYearWidget
+from dal import autocomplete
+
 '''
 Below is how we will create studentCreationForm and recruiterCreationForm
 '''
@@ -291,3 +294,22 @@ class RemindUsernameForm(UserCacheMixin, forms.Form):
         self.user_cache = user
 
         return email
+
+def major_list():
+    return ['Aerospace Engineering', 'Computer Science','Mathematics', 'Mechanical Engineering', 'Zoology']
+
+class StudentProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username','first_name','last_name', 'email', 'university', 'major',
+                    'grad_date', 'career_interest']
+    username = forms.CharField(label='your username')
+    first_name = forms.CharField(label='your first name')
+    last_name = forms.CharField(label='your last name')
+    university = forms.CharField(label='your university')
+    major = autocomplete.Select2ListChoiceField(
+        choice_list=major_list,
+        widget=autocomplete.ListSelect2(url='accounts:major-autocomplete')
+    )
+    grad_date = forms.DateField(widget=MonthYearWidget)
+    career_interest = forms.CharField(label='your career interest')

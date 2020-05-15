@@ -18,7 +18,7 @@ class Activation(models.Model):
     code = models.CharField(max_length=20, unique=True)
     email = models.EmailField(blank=True)
 
-class Student(models.Model):
+class Student(models.Model): #to be merged with StudentProfile
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     school = models.CharField(max_length = 100)
     major = models.CharField(max_length=100)
@@ -26,3 +26,12 @@ class Student(models.Model):
 class Recruiter(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=True,null=True)
     company = models.CharField(max_length = 100)
+
+class StudentProfile(models.Model): #to be merged with Student
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE) #might need to change user..
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    university = models.CharField(max_length=100) #change to autocomplete
+    major = models.CharField(max_length=100) #change to autocomplete
+    grad_date = models.DateField()
+    career_interest = models.CharField(max_length=100) #change to autocomplete

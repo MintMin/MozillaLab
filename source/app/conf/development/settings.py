@@ -18,6 +18,8 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 SITE_ID = 1
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     #'grappelli, (if present)
     'django.contrib.admin',
     'django.contrib.auth',
