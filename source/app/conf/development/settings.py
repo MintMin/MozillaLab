@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # Application apps
     'main',
     'accounts',
+    'event',
     'search',
     'calendars',
     'user_profile',
