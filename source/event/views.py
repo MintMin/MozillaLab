@@ -24,4 +24,8 @@ from django.views.generic import TemplateView
 
 
 class ViewEvent(TemplateView):
-    template_name = 'event/event_view.html'
+    template_name = 'event/view_event.html'
+
+class ExampleEvent(TemplateView):
+    template_name = 'event/example_event.html'
+
