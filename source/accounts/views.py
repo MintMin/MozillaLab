@@ -34,8 +34,8 @@ from .forms import (
 from .models import Activation, Profile, Recruiter, Student, CustomUser
 from django.urls import reverse_lazy
 
-
-# Michael's web page:
+from dal import autocomplete
+from .forms import StudentProfileForm, major_list
 from django.views.generic import CreateView
 
 
@@ -417,3 +417,11 @@ class RestorePasswordDoneView(BasePasswordResetDoneView):
 
 class LogOutView(LoginRequiredMixin, BaseLogoutView):
     template_name = 'accounts/log_out.html'
+
+class StudentProfileView(FormView):
+    template_name = 'accounts/student_profile.html'
+    form_class = StudentProfileForm
+
+class AutocompleteMajor(autocomplete.Select2ListView):
+    def get_list(self):
+        return major_list()

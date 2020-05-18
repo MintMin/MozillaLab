@@ -6,6 +6,10 @@ from .views import (
     RestorePasswordView, RestorePasswordDoneView, RestorePasswordConfirmView, StudentSignUpView
 )
 
+from django.conf.urls import url
+from .views import (
+    StudentProfileView, AutocompleteMajor
+)
 app_name = 'accounts'
 
 urlpatterns = [
@@ -29,7 +33,8 @@ urlpatterns = [
     path('change/password/', ChangePasswordView.as_view(), name='change_password'),
     path('change/email/', ChangeEmailView.as_view(), name='change_email'),
     path('change/email/<code>/', ChangeEmailActivateView.as_view(), name='change_email_activation'),
-
+    path('student-profile', StudentProfileView.as_view(), name='student-profile'),
+    url(r'^major-autocomplete/$', AutocompleteMajor.as_view(), name='major-autocomplete')
     # path('', AccountSettings.as_view(), name='account_settings'),
 
 ]
