@@ -35,8 +35,7 @@ from .models import Activation, Profile, Recruiter, Student, CustomUser
 from django.urls import reverse_lazy
 
 from dal import autocomplete
-from .forms import StudentProfileForm
-
+from .forms import StudentProfileForm, major_list
 from django.views.generic import CreateView
 
 
@@ -425,4 +424,4 @@ class StudentProfileView(FormView):
 
 class AutocompleteMajor(autocomplete.Select2ListView):
     def get_list(self):
-        return ['Aerospace Engineering', 'Computer Science','Mathematics', 'Mechanical Engineering', 'Zoology']
+        return major_list()
