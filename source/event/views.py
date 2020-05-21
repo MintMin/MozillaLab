@@ -23,7 +23,9 @@ from django.views.generic import TemplateView
 
 
 
-class ViewProfile(TemplateView):
-    template_name = 'user_profile/view_profile.html'
+class ViewEvent(TemplateView):
+    template_name = 'event/view_event.html'
 
+class ExampleEvent(TemplateView):
+    template_name = 'event/example_event.html'
 

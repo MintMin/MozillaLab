@@ -15,11 +15,11 @@ urlpatterns = [
 
     path('accounts/', include('accounts.urls')),
     path('search/', include('search.urls')),
+    path('event/', include('event.urls')),
     path('profile/', include('user_profile.urls')),
     path('calendar/', include('calendars.urls')),
     path('infosession/', include('infosession.urls')),
     path('interview/', include('interview.urls')),
-
 
 ]
 

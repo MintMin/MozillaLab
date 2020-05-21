@@ -8,7 +8,7 @@ from .views import (
 
 from django.conf.urls import url
 from .views import (
-    StudentProfileView, AutocompleteMajor
+    StudentProfileView, AutocompleteMajor, AutocompleteUni, AutocompleteCareerInt
 )
 app_name = 'accounts'
 
@@ -33,8 +33,11 @@ urlpatterns = [
     path('change/password/', ChangePasswordView.as_view(), name='change_password'),
     path('change/email/', ChangeEmailView.as_view(), name='change_email'),
     path('change/email/<code>/', ChangeEmailActivateView.as_view(), name='change_email_activation'),
-    path('student-profile', StudentProfileView.as_view(), name='student-profile'),
-    url(r'^major-autocomplete/$', AutocompleteMajor.as_view(), name='major-autocomplete')
-    # path('', AccountSettings.as_view(), name='account_settings'),
 
+    path('student-profile', StudentProfileView.as_view(), name='student-profile'),
+    url(r'^major-autocomplete/$', AutocompleteMajor.as_view(), name='major-autocomplete'),
+    url(r'^uni-autocomplete/$', AutocompleteUni.as_view(), name='uni-autocomplete'),
+    url(r'^career-autocomplete/$', AutocompleteCareerInt.as_view(), name='career-autocomplete'),
+
+    # path('', AccountSettings.as_view(), name='account_settings'),
 ]

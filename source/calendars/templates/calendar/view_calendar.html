@@ -1,0 +1,12 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+    {% block content %}
+      <p>This is the calendar page. </p>
+    <h1>Scheduled Events (info-session+interview)</h1>
+    <ul>
+      <li><a href="{% url 'event:example_event' %}"> Event Example #1: Google Summer Intern </a></li>
+      <li><a href="">Event Example #2: Facebook Summer Intern (not clickable)</a></li>
+    </ul>
+    {% endblock %}
