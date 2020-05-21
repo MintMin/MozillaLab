@@ -136,23 +136,7 @@ class RecruiterSignUpForm(CustomUserCreationForm):
         recruiter = Recruiter.objects.create(user=user, company = self.cleaned_data['company'])
         return user
 
-class StudentSignUpForm(CustomUserCreationForm):
-    university = forms.CharField(max_length = 100)
-    major = forms.CharField(max_length = 100)
-    grad_date = forms.DateField(widget=MonthYearWidget)
-    class Meta(CustomUserCreationForm.Meta):
-        model = CustomUser
 
-    @transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.is_student = True
-        user.save()
-        student = Student.objects.create(user = user,
-                                         major = self.cleaned_data['major'],
-                                         university = self.cleaned_data['university'],
-                                         grad_date = self.cleaned_data['grad_date'])
-        return user
 
 # class SignUpForm(CustomUserCreationForm):
 #     class Meta:
@@ -312,21 +296,68 @@ class StudentProfileForm(forms.ModelForm):
         model = CustomUser
         fields = ['email', 'first_name','last_name', 'university', 'major',
                     'grad_date', 'career_interest']
-    # first_name = forms.CharField(label='your first name')
-    # last_name = forms.CharField(label='your last name')
+    first_name = forms.CharField(label='your first name')#, default = self.user.first_name)
+    last_name = forms.CharField(label='your last name')#, default = self.user.last_name)
     university = autocomplete.Select2ListCreateChoiceField(
         choice_list=uni_list(),
         required=False,
-        widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')
+        widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')#,
+        #initial = self.user.university
     )
     major = autocomplete.Select2ListCreateChoiceField(
         choice_list=major_list,
         required=False,
-        widget=autocomplete.ListSelect2(url='accounts:major-autocomplete')
+        widget=autocomplete.ListSelect2(url='accounts:major-autocomplete')#,
+       # initial = self.user.major
     )
-    grad_date = forms.DateField(widget=MonthYearWidget)
+    grad_date = forms.DateField(widget=MonthYearWidget)#, default = self.user.grad_date)
     career_interest = autocomplete.Select2ListCreateChoiceField(
         choice_list=career_list(),
         required=False,
         widget=autocomplete.ListSelect2(url='accounts:career-autocomplete')
     )
+    
+class StudentSignUpForm(CustomUserCreationForm):
+    university = autocomplete.Select2ListCreateChoiceField(
+        choice_list=uni_list(),
+        required=False,
+        widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')#,
+        #initial = self.user.university
+    )
+    major = autocomplete.Select2ListCreateChoiceField(
+        choice_list=major_list,
+        required=False,
+        widget=autocomplete.ListSelect2(url='accounts:major-autocomplete')#,
+       # initial = self.user.major
+    )
+    grad_date = forms.DateField(widget=MonthYearWidget)
+    class Meta(CustomUserCreationForm.Meta):
+        model = CustomUser
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_student = True
+        user.save()
+        student = Student.objects.create(user = user,
+                                         major = self.cleaned_data['major'],
+                                         university = self.cleaned_data['university'],
+                                         grad_date = self.cleaned_data['grad_date'])
+        return user
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

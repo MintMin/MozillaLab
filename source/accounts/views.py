@@ -81,7 +81,7 @@ class RecruiterSignUpView(CreateView):
 class StudentSignUpView(CreateView):
     model = CustomUser
     form_class = StudentSignUpForm
-    template_name = 'accounts/student_sign_up.html'
+    template_name = 'accounts/student_profile.html'#'accounts/student_sign_up.html'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
@@ -418,9 +418,46 @@ class RestorePasswordDoneView(BasePasswordResetDoneView):
 class LogOutView(LoginRequiredMixin, BaseLogoutView):
     template_name = 'accounts/log_out.html'
 
-class StudentProfileView(FormView):
+class StudentProfileView(View):
     template_name = 'accounts/student_profile.html'
     form_class = StudentProfileForm
+    # Handle GET HTTP requests
+    def get(self, request, *args, **kwargs):
+        student = Student.objects.get(id = request.user.id) # just an example
+        data = {'first_name': student.user.first_name,
+                'last_name': student.user.last_name,
+                'email': student.user.email,
+                'university': student.university,
+                'major': student.major,
+                'grad_date': student.grad_date,
+                'career_list': student.career_interest}
+        form = self.form_class(initial=data)
+        return render(request, self.template_name, {'form': form})
+
+    # Handle POST GTTP requests
+    def post(self, request, *args, **kwargs):
+        # form = self.form_class(instance=Student, data=request.POST)
+        # if form.is_valid():
+        #     # instance = form.save(commit=False)
+        #     # instance.student = request.user
+        #     # instance.save()
+        #     pass
+
+        form = self.form_class(data = request.POST, instance=request.user)
+        if form.is_valid():
+            # <process form cleaned data>
+            form.save()
+            # instance.student = request.user
+            # instance.save()
+            return redirect('index')
+
+        return render(request, self.template_name, {'form': form})
+    # def view(request,self):
+    #     form = StudentProfileForm(initial=data)
+    #     return render_to_response('accounts/student_profile.html', {'form': form})
+
+
+
 
 class AutocompleteMajor(autocomplete.Select2ListView):
 
