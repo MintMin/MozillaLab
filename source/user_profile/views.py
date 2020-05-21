@@ -24,6 +24,6 @@ from django.views.generic import TemplateView
 
 
 class ViewProfile(TemplateView):
-    template_name = 'profile/view_profile.html'
+    template_name = 'user_profile/view_profile.html'
 
 
