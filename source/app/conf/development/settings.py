@@ -118,9 +118,9 @@ RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
 ENABLE_ACTIVATION_AFTER_EMAIL_CHANGE = True
 
 RECRUITER_FIELDS = ['company'] 
-STUDENT_FIELDS = ['school'] 
+STUDENT_FIELDS = ['university']
 PROFILE_SIGN_UP = ['user_type','username', 'first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
-SIGN_UP_FIELDS = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
+SIGN_UP_FIELDS = ['first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
 if DISABLE_USERNAME:
     SIGN_UP_FIELDS = ['first_name', 'last_name', 'email', 'password1', 'password2']
 

@@ -17,7 +17,7 @@ from django.db import transaction
 
 from .widgets import MonthYearWidget
 from dal import autocomplete
-from .models import StudentProfile
+
 '''
 Below is how we will create studentCreationForm and recruiterCreationForm
 '''
@@ -137,9 +137,9 @@ class RecruiterSignUpForm(CustomUserCreationForm):
         return user
 
 class StudentSignUpForm(CustomUserCreationForm):
-    school = forms.CharField(max_length = 100)
+    university = forms.CharField(max_length = 100)
     major = forms.CharField(max_length = 100)
-
+    grad_date = forms.DateField(widget=MonthYearWidget)
     class Meta(CustomUserCreationForm.Meta):
         model = CustomUser
 
@@ -148,7 +148,10 @@ class StudentSignUpForm(CustomUserCreationForm):
         user = super().save(commit=False)
         user.is_student = True
         user.save()
-        student = Student.objects.create(user=user, major = self.cleaned_data['major'], school = self.cleaned_data['school'])
+        student = Student.objects.create(user = user,
+                                         major = self.cleaned_data['major'],
+                                         university = self.cleaned_data['university'],
+                                         grad_date = self.cleaned_data['grad_date'])
         return user
 
 # class SignUpForm(CustomUserCreationForm):
@@ -307,17 +310,23 @@ def career_list():
 class StudentProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['username','first_name','last_name', 'email', 'university', 'major',
+        fields = ['email', 'first_name','last_name', 'university', 'major',
                     'grad_date', 'career_interest']
-
-    username = forms.CharField(label='your username')
-    first_name = forms.CharField(label='your first name')
-    last_name = forms.CharField(label='your last name')
-    university = forms.CharField(label='your university')
+    # first_name = forms.CharField(label='your first name')
+    # last_name = forms.CharField(label='your last name')
+    university = autocomplete.Select2ListCreateChoiceField(
+        choice_list=uni_list(),
+        required=False,
+        widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')
+    )
     major = autocomplete.Select2ListCreateChoiceField(
         choice_list=major_list,
         required=False,
         widget=autocomplete.ListSelect2(url='accounts:major-autocomplete')
     )
     grad_date = forms.DateField(widget=MonthYearWidget)
-    career_interest = forms.CharField(label='your career interest')
+    career_interest = autocomplete.Select2ListCreateChoiceField(
+        choice_list=career_list(),
+        required=False,
+        widget=autocomplete.ListSelect2(url='accounts:career-autocomplete')
+    )

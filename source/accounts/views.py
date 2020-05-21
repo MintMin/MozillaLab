@@ -35,7 +35,7 @@ from .models import Activation, Profile, Recruiter, Student, CustomUser
 from django.urls import reverse_lazy
 
 from dal import autocomplete
-from .forms import StudentProfileForm, major_list
+from .forms import StudentProfileForm, major_list, uni_list, career_list
 from django.views.generic import CreateView
 
 
@@ -423,5 +423,14 @@ class StudentProfileView(FormView):
     form_class = StudentProfileForm
 
 class AutocompleteMajor(autocomplete.Select2ListView):
+
     def get_list(self):
         return major_list()
+
+class AutocompleteUni(autocomplete.Select2ListView):
+    def get_list(self):
+        return uni_list()
+
+class AutocompleteCareerInt(autocomplete.Select2ListView):
+    def get_list(self):
+        return career_list()
