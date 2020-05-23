@@ -21,6 +21,7 @@ from django.views.generic import View, FormView
 from django.conf import settings
 from django.views.generic import TemplateView, CreateView
 from .models import Event
+from .forms import CreateEventForm
 
 
 
@@ -34,3 +35,8 @@ class CreateEvent(CreateView):
 	template_name = 'event/create_event.html'
 	model = Event
 	form_class = CreateEventForm
+	def form_valid(self, form):
+		event = form.save()
+		request = self.request
+		messages.success(request, _('You have successfully created your event'))
+		return redirect('index')

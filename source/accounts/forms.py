@@ -87,7 +87,7 @@ class SignInViaEmailForm(SignIn):
     def clean_email(self):
         email = self.cleaned_data['email']
 
-        user = CustomCustomUser.objects.filter(email__iexact=email).first()
+        user = CustomUser.objects.filter(email__iexact=email).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address.'))
 
@@ -111,7 +111,7 @@ class SignInViaEmailOrUsernameForm(SignIn):
     def clean_email_or_username(self):
         email_or_username = self.cleaned_data['email_or_username']
 
-        user = CustomCustomUser.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
+        user = CustomUser.objects.filter(Q(username=email_or_username) | Q(email__iexact=email_or_username)).first()
         if not user:
             raise ValidationError(_('You entered an invalid email address or username.'))
 
