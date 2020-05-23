@@ -460,7 +460,6 @@ class StudentProfileView(View):
 
 
 class AutocompleteMajor(autocomplete.Select2ListView):
-
     def get_list(self):
         return major_list()
 

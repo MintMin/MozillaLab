@@ -61,8 +61,6 @@ class Recruiter(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE) #might need to change user..
-    # first_name = models.CharField(max_length=100)
-    # last_name = models.CharField(max_length=100)
     university = models.CharField(max_length=100)
     major = models.CharField(max_length=100)
     grad_date = models.DateField()

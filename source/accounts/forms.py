@@ -283,7 +283,7 @@ class RemindUsernameForm(UserCacheMixin, forms.Form):
         return email
 
 def major_list():
-    return ['Aerospace Engineering', 'Computer Science','Mathematics', 'Mechanical Engineering', 'Zoology']
+    return settings.MAJOR_LIST
 
 def uni_list():
     return ['Harvey Mudd', 'Pitzer College', 'University of California, Irvine', 'California Polytechnic University, San Luis Obispo']
