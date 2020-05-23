@@ -286,7 +286,7 @@ def major_list():
     return settings.MAJOR_LIST
 
 def uni_list():
-    return ['Harvey Mudd', 'Pitzer College', 'University of California, Irvine', 'California Polytechnic University, San Luis Obispo']
+    return settings.UNIV_LIST
 
 def career_list():
     return ['Software Engineer', 'Product Manager', 'Data Analyst', 'Data Scientist', 'Data Engineer']
