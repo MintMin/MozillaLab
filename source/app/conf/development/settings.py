@@ -2,6 +2,7 @@ import os
 import warnings
 from django.utils.translation import ugettext_lazy as _
 from os.path import dirname
+import csv
 
 warnings.simplefilter('error', DeprecationWarning)
 
@@ -121,6 +122,68 @@ RECRUITER_FIELDS = ['company']
 STUDENT_FIELDS = ['university']
 PROFILE_SIGN_UP = ['user_type','username', 'first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
 SIGN_UP_FIELDS = ['first_name', 'last_name', 'email', 'password1', 'password2'] # add user_type
+UNIV_LIST = [
+'Harvard University',
+'Massachusetts Institute of Technology',
+'Stanford University',
+'California Institute of Technology',
+'Princeton University',
+'Yale University',
+'Columbia University',
+'University of California, Berkeley',
+'University of Chicago',
+'Cornell University',
+'University of Pennsylvania',
+'Johns Hopkins University',
+'University of California, Los Angeles',
+'University of California, San Diego',
+'Rockefeller University',
+'New York University',
+'University of California, San Francisco',
+'University of Wisconsin - Madison',
+'University of Illinois at Urbana - Champaign',
+'Duke University',
+'University of Texas Southwestern Medical Center',
+'University of Texas at Austin',
+'Northwestern University',
+'University of Michigan, Ann Arbor',
+'University of North Carolina at Chapel Hill',
+'Washington University in St. Louis',
+'University of Utah',
+'University of Washington - Seattle',
+'University of California, Santa Barbara',
+'Purdue University, West Lafayette',
+'Pitzer College',
+'Carnegie Mellon University',
+'University of Southern California',
+'University of California, Davis',
+'University of Colorado Boulder',
+'University of California, Irvine',
+'University of Minnesota, Twin Cities',
+'University of Arizona',
+'Ohio State University, Columbus',
+'University of Rochester',
+'University of Florida',
+'Rice University',
+'Dartmouth College',
+'Vanderbilt University',
+'Boston University',
+'Pennsylvania State University, University Park',
+'Brown University',
+'University of Maryland, College Park',
+'University of Pittsburgh - Pittsburgh Campus',
+'Rutgers University-New Brunswick',
+'Texas A&M University, College Station',
+'Case Western Reserve University',
+'Arizona State University',
+'Emory University',
+'University of Virginia',
+'Tufts University',
+'Georgia Institute of Technology',
+'Williams College',
+'University of Texas MD Anderson Cancer Center'
+]
+
 MAJOR_LIST = [
  'General Agriculture',
  'Agriculture Production And Management',
