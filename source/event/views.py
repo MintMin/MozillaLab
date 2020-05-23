@@ -19,7 +19,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import View, FormView
 from django.conf import settings
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+from .models import Event
 
 
 
@@ -29,3 +30,7 @@ class ViewEvent(TemplateView):
 class ExampleEvent(TemplateView):
     template_name = 'event/example_event.html'
 
+class CreateEvent(CreateView):
+	template_name = 'event/create_event.html'
+	model = Event
+	form_class = CreateEventForm

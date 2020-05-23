@@ -294,7 +294,7 @@ MAJOR_LIST = [
  'International Relations',
  'Political Science And Government',
  'Sociology',
- 'Miscellaneous Social Sciences']
+ "Miscellaneous Social Sciences"]
 if DISABLE_USERNAME:
     SIGN_UP_FIELDS = ['first_name', 'last_name', 'email', 'password1', 'password2']
 

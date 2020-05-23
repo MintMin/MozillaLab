@@ -1,0 +1,16 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+    	{% if request.user.is_recruiter %}
+    		show create event form
+    	{% else %}
+    		You are not a recruiter, thus, cannot create an event
+    	{% endif %}
+    {% else %}
+    	You are not authenticated. Please validate your email to create an event.
+    {% endif %}
+    
+{% endblock %}
