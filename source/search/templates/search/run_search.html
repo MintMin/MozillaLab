@@ -4,4 +4,23 @@
 
     {% block content %}
       <p>This is the search page. </p>
+
+      {% if error_msg %}
+        <p>{{ error_msg }}</p>
+      {% endif %}
+
+      
+      {% for event in result_list %}
+      <div>
+        <li>
+          <a href="{% url 'event:detail' event.id %}">{{ event.title }}</a> {{event.company}}
+        </li>
+      </div>
+
+      {% empty %}
+        <div class="no-result">
+          Didn't find a related event ;(
+       </div>
+      {% endfor %}
+
     {% endblock %}
