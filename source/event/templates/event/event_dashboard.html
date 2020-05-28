@@ -20,17 +20,54 @@
         
 
         <h1>Event Dashboard</h1>
+        
+        
         {% if all_events %}
-        <ul>
+      <!-- </div class="card-group"> -->
+        </div>
           {% for event in all_events %}
-            <li>
+          
+
+          <div class="card border-info mb-3" style="max-width: 20rem;">
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            <!-- <div class="card-header">Header</div> -->
+           
+              <div class="card-body text-dark">
+                  <h5 class="card-title bg-info text-white ">{{event.title}}</h5>
+                  <p class="card-text">{{event.summary}}</p>
+                  
+
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{event.main_recruiter}}</li>
+                    <li class="list-group-item">{{event.date}}</li>
+                    <!-- <li class="list-group-item">{{event.time}}</li> -->
+                  </ul>
+
+                  <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
+
+                </div> 
+          </div>
+
+          </div>
+        
+            <!-- <li>
               <a href="{% url 'event:detail' event.id %}">{{ event.title }}</a> {{event.company}}
-            </li>
+            </li> -->
           {% endfor %}
-        </ul>
+       
+        </div>
+      <!-- </div> -->
+        <!--  </ul> -->
+
+
+
+
+
+
         {% else %}
           <p>There are no event in the library.</p>
         {% endif %}   
+
 
     {% else %}
 
