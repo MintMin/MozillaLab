@@ -3,6 +3,14 @@
 {% load i18n %}
 
 {% block content %}
-    <p>Google Summer Intern Interview Page</p>
+    <p>Title: {{ event.title }}</p>
+    <p>Recruiter: {{ event.main_recruiter }}</p>
+    <p>Summary: {{ event.summary }}</p>
+    <p>Date: {{ event.date }}</p>
+    <p>Time: {{ event.time }}</p>
+    {% if rsvp_bool %}
+<input class="btn btn-success" type="button" value="RSVP" onclick="location.href='{% url 'event:rsvp' event.id%}'"  />
+{% endif %}
+
     
 {% endblock %}

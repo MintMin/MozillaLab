@@ -2,7 +2,7 @@
 
 {% load i18n %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 {% block content %}
     {% if request.user.is_authenticated %}
     	{% if request.user.is_recruiter %}
@@ -13,6 +13,7 @@
 			        {% csrf_token %}
 			        <input type="hidden" name="next" value="{{ next }}">
 			        {{ form|crispy }}
+					</script>
 			        <button type="submit" class="btn btn-success">Sign up</button>
 			      </form>
 			    </div>
@@ -23,5 +24,5 @@
     {% else %}
     	You are not authenticated. Please validate your email to create an event.
     {% endif %}
-    
+
 {% endblock %}

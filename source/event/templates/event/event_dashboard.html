@@ -1,0 +1,42 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+        <h1>Your Events</h1>
+        {% if event_list %}
+        <ul>
+          {% for event in event_list %}
+            <li>
+              <a href="{% url 'event:detail' event.id %}">{{ event.title }}</a> {{event.company}}
+            </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+          <p>There are no event in the library.</p>
+        {% endif %}     
+        
+
+        <h1>Event Dashboard</h1>
+          {% if all_events %}
+        <ul>
+          {% for event in all_events %}
+            <li>
+              <a href="{% url 'event:detail' event.id %}">{{ event.title }}</a> {{event.company}}
+            </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+          <p>There are no event in the library.</p>
+        {% endif %}   
+
+    {% else %}
+
+        {% trans 'You are a guest.' %}
+
+    {% endif %}
+
+
+{% endblock %}

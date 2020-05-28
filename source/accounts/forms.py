@@ -305,7 +305,7 @@ class StudentProfileForm(forms.ModelForm):
         #initial = self.user.university
     )
     major = autocomplete.Select2ListCreateChoiceField(
-        choice_list=major_list,
+        choice_list=major_list(),
         required=False,
         widget=autocomplete.ListSelect2(url='accounts:major-autocomplete')#,
        # initial = self.user.major

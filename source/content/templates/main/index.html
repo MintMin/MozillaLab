@@ -7,25 +7,7 @@
     {% if request.user.is_authenticated %}
 
         {% trans 'Your email is' %} <b>{{ request.user.email }}</b>.
-        <h1>Event List</h1>
-        {% if event_list %}
-        <ul>
-          {% for event in event_list %}
-            <li>
-              <a href="{{ event.get_absolute_url }}">{{ event.title }}</a> ({{event.company}})
-            </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-          <p>There are no event in the library.</p>
-        {% endif %}     
-        
-
-        <h1>Events Dashboard</h1>
-        <ul>
-          <li><a href="{% url 'event:example_event' %}"> Event Example #1: Google Summer Intern </a></li>
-          <li><a href="">Event Example #2: Facebook Summer Intern (not clickable)</a></li>
-        </ul>
+  
 
     {% else %}
 

@@ -38,6 +38,8 @@ from dal import autocomplete
 from .forms import StudentProfileForm, major_list, uni_list, career_list
 from django.views.generic import CreateView
 
+from django.shortcuts import get_object_or_404
+
 
 class RecruiterSignUpView(CreateView):
     model = CustomUser
@@ -418,12 +420,14 @@ class RestorePasswordDoneView(BasePasswordResetDoneView):
 class LogOutView(LoginRequiredMixin, BaseLogoutView):
     template_name = 'accounts/log_out.html'
 
+
 class StudentProfileView(View):
     template_name = 'accounts/student_profile.html'
     form_class = StudentProfileForm
     # Handle GET HTTP requests
     def get(self, request, *args, **kwargs):
-        student = Student.objects.get(id = request.user.id) # just an example
+        # student = Student.objects.get(id = request.user.id) # just an example
+        student = get_object_or_404(Student, user_id = self.request.user)
         data = {'first_name': student.user.first_name,
                 'last_name': student.user.last_name,
                 'email': student.user.email,

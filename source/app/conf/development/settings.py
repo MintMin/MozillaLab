@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_forms_bootstrap',
+    'datetimepicker',
 
     # Vendor apps
     'bootstrap4',

@@ -21,9 +21,23 @@ from django.views.generic import View, FormView
 from django.conf import settings
 from django.views.generic import TemplateView, CreateView
 from .models import Event
+from accounts.models import Recruiter
 from .forms import CreateEventForm
 
+def detail(request, event_id):
+	event = get_object_or_404(Event, pk=event_id)
+	rsvp = True
+	if(event in Event.objects.filter(rsvp_list__in = [request.user])):
+		rsvp = False
+	return render(request, 'event/view_event.html', {'event': event, 'rsvp_bool':rsvp})
 
+def rsvp(request, event_id):
+	event = get_object_or_404(Event, pk=event_id)
+	user = request.user
+	event.rsvp_list.add(user)
+	# if(event.rsvp_list.filter(rsvp_list__in = [user])):
+	messages.success(request, _('You have successfully rsvpd for the event'))
+	return redirect('index')
 
 class ViewEvent(TemplateView):
     template_name = 'event/view_event.html'
@@ -31,12 +45,29 @@ class ViewEvent(TemplateView):
 class ExampleEvent(TemplateView):
     template_name = 'event/example_event.html'
 
+class EventDashboard(TemplateView):
+	template_name = 'event/event_dashboard.html'
+	def get_context_data(self, **kwargs):
+		request = self.request
+		context = super(EventDashboard, self).get_context_data(**kwargs)
+		if(request.user.is_recruiter):
+			context['event_list'] = Event.objects.filter(main_recruiter = request.user)
+		elif(request.user.is_student):
+			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user])
+		context['all_events'] = Event.objects.all()
+		return context
+
 class CreateEvent(CreateView):
 	template_name = 'event/create_event.html'
 	model = Event
 	form_class = CreateEventForm
+	def save(self, *args, **kwargs):
+		self.absolute_url = self.get_absolute_url()
+		super(event, self).save(*args, **kwargs)
 	def form_valid(self, form):
 		event = form.save()
 		request = self.request
+		event.main_recruiter = request.user
+		form.save()
 		messages.success(request, _('You have successfully created your event'))
 		return redirect('index')

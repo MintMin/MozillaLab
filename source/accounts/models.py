@@ -44,6 +44,9 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.last_name}, {self.first_name}, {self.email}'
 
 class Profile(models.Model): # Child of User
    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
