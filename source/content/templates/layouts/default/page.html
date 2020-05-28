@@ -85,8 +85,9 @@
             <li>
                     <div class = "search">
                             <form class="example" action="{% url 'search:run_search' %}" >
-                                    <input type="text" placeholder="Search.." name="search">
-                                    <button type="submit"><i class="fa fa-search"></i></button>
+                                {% csrf_token %}
+                                <input type="text" placeholder="Search.." name="keyword">
+                                <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
                     </li>
