@@ -42,9 +42,6 @@ def rsvp(request, event_id):
 class ViewEvent(TemplateView):
     template_name = 'event/view_event.html'
 
-class ExampleEvent(TemplateView):
-    template_name = 'event/example_event.html'
-
 class EventDashboard(TemplateView):
 	template_name = 'event/event_dashboard.html'
 	def get_context_data(self, **kwargs):
@@ -56,6 +53,27 @@ class EventDashboard(TemplateView):
 			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user])
 		context['all_events'] = Event.objects.all()
 		return context
+
+# do I need to name a new class for event list page???
+class EventList(TemplateView):
+	template_name = 'event/event_list.html'
+	def get_context_data(self, **kwargs):
+		request = self.request
+		context = super(EventList, self).get_context_data(**kwargs)
+		context['all_events'] = Event.objects.all()
+		return context
+
+class MyEventList(TemplateView):
+	template_name = 'event/my_event_list.html'
+	def get_context_data(self, **kwargs):
+		request = self.request
+		context = super(MyEventList, self).get_context_data(**kwargs)
+		if(request.user.is_recruiter):
+			context['event_list'] = Event.objects.filter(main_recruiter = request.user)
+		elif(request.user.is_student):
+			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user])
+		return context
+
 
 class CreateEvent(CreateView):
 	template_name = 'event/create_event.html'
