@@ -10,7 +10,7 @@
     <p>Time: {{ event.time }}</p>
     
     {% if rsvp_bool %}
-        <input class="btn btn-success" type="button" value="RSVP" onclick="location.href='{% url 'event:rsvp' event.id%}'"  />
+        <button class="btn btn-success" onclick="location.href='{% url 'event:rsvp' event.id%}'"> RSVP</button>
     {% endif %}
 
     <script>

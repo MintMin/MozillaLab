@@ -5,47 +5,8 @@
 {% block content %}
 
     {% if request.user.is_authenticated %}
-      
-        <h1>Your Events</h1>
 
-        {% if event_list %}
-          <ul>
-            {% for event in event_list %}
-              <div class="card border-info mb-3" style="max-width: 20rem;">
-                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-                <!-- <div class="card-header">Header</div> -->
-              
-                  <div class="card-body text-dark">
-                      <h5 class="card-title bg-info text-white ">{{event.title}}</h5>
-                      <p class="card-text">{{event.summary}}</p>
-                      
-
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{event.main_recruiter}}</li>
-                        <li class="list-group-item">{{event.date}}</li>
-                        <!-- <li class="list-group-item">{{event.time}}</li> -->
-                      </ul>
-                  </div> 
-                  
-                  <div class="card-body">
-                      <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
-                      <a href="{% url 'event:rsvp' event.id %}" class="btn btn-success"> RSVP </a>
-                  </div> 
-              </div>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>There are no event in the library.</p>
-        {% endif %}     
-        
-
-      {% if request.user.is_student %}
-          <div class="headline">
-            <h1>Event Dashboard
-            <button class="btn btn-warning" onclick="location.href='{% url 'event:event_list' %}'">View All Event</button> 
-            </h1> 
-          </div>
-
+          <h1>Event Dashboard</h1>
             {% if all_events %}
           <!-- </div class="card-group"> -->
               <ul>
@@ -81,7 +42,6 @@
               <p>There are no event in the library.</p>
             {% endif %} 
           </ul>  
-      {% endif %}
 
     {% else %}
 
