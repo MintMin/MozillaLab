@@ -8,9 +8,18 @@
     <p>Summary: {{ event.summary }}</p>
     <p>Date: {{ event.date }}</p>
     <p>Time: {{ event.time }}</p>
+    
     {% if rsvp_bool %}
-<input class="btn btn-success" type="button" value="RSVP" onclick="location.href='{% url 'event:rsvp' event.id%}'"  />
-{% endif %}
+        <input class="btn btn-success" type="button" value="RSVP" onclick="location.href='{% url 'event:rsvp' event.id%}'"  />
+    {% endif %}
+
+    <script>
+        function goBack()
+        {
+            window.history.back()
+        }
+    </script>
+    <input class="btn btn-primary" type="button" value="<<Back" onclick="goBack()">
 
     
 {% endblock %}

@@ -2,6 +2,41 @@
 
 {% load i18n %}
 
+  <div class="col-sm-4">
+
+
+    <form class="example" action="{% url 'search:run_search' %}" >
+      {% csrf_token %}
+      <input type="text" placeholder="Search.." name="keyword">
+      <span class="input-group-btn">
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </span>     
+      
+    </form>
+  </div>
+
     {% block content %}
       <p>This is the search page. </p>
+
+      {% if error_msg %}
+        <p>{{ error_msg }}</p>
+
+      {% elif result_list %} 
+        {% for event in result_list %}
+        <div>
+          <li>
+            <a href="{% url 'event:detail' event.id %}">{{ event.title }}</a> {{event.company}}
+          </li>
+        </div>
+        {% endfor %}
+      
+
+      {% else %}
+        <div class="no-result">
+          Didn't find a related event ;(
+        </div>
+      
+      {% endif %}
+      
+
     {% endblock %}

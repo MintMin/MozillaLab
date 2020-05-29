@@ -20,6 +20,7 @@
 
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
@@ -81,19 +82,21 @@
 
 
         <ul class="navbar-nav">
-                <li>
-                        <div class = "search">
-                                <form class="example" action="{% url 'search:run_search' %}" >
-                                        <input type="text" placeholder="Search.." name="search">
-                                        <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
-                            </div>
-                        </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
-                </li>
+            <li>
+                <div class = "search">
+                    <form class="example" action="{% url 'search:run_search' %}" >
+                        {% csrf_token %}
+                        <input type="text" placeholder="Search.." name="keyword">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </li>
 
-            </ul>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
+            </li>
+
+        </ul>
     </div>
 
 </nav>

@@ -9,10 +9,12 @@
     <li> Summary: blablbalbalablabala</a></li>
     </ul>
     
-{% endblock %}
+
 
 <!-- <div class="btn-group"> -->
-    <a href="{% url 'calendars:view_calendar' %}" class="btn btn-warning"">Add Info-session</a>
-    <a href="{% url 'infosession:view_infosession' %}" class="btn btn-primary" rol"add-calendar" role="buttoe="button">Join Info-session</a>
+    <a href="{% url 'calendars:view_calendar' %}" class="btn btn-warning" role="button">Add to Calendar</a>
+    <a href="{% url 'infosession:view_infosession' %}" class="btn btn-primary" role="button">Join Info-session</a>
     <a href="{% url 'interview:view_interview' %}" class="btn btn-success" role="button">Schedule An Interview</a>
 <!-- </div>     -->
+
+{% endblock %}
