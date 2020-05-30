@@ -2,66 +2,6 @@ from django.db import models
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 from accounts.models import Recruiter, CustomUser, Student
 
-# Create your models here.
-
-# class Type(models.Model):
-#     """Model representing a event type."""
-#     # name = models.CharField(max_length=50, help_text='Enter a event type (e.g. Infosession)')
-#     EVENT_TYPE = (
-#         ('Infosession'),
-#         ('i','infosession+Interview'),
-#         ('Interview Only'),
-#         # ('r', 'Reserved'), 
-#     )
-
-#     name = models.CharField(
-#         max_length=1,
-#         choices=EVENT_TYPE,
-#         blank=True,
-#         default='i',
-#         help_text='The type of event',
-#     )
-
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return self.name
-
-
-# class Recruiter(models.Model):
-#     """Model representing an author."""
-#     first_name = models.CharField(max_length=100)
-#     last_name = models.CharField(max_length=100)
-    
-
-#     class Meta:
-#         ordering = ['last_name', 'first_name']
-
-#     def get_absolute_url(self):
-#         """Returns the url to access a particular author instance."""
-#         return reverse('author-detail', args=[str(self.id)])
-
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.last_name}, {self.first_name}'
-
-# class Company(models.Model):
-#     """Model representing an author."""
-#     company_name = models.CharField(max_length=100)
-#     country = models.CharField(max_length=100)
-#     city = models.CharField(max_length=100)
-
-#     class Meta:
-#         ordering = ['company_name', 'country','city']
-
-#     def get_absolute_url(self):
-#         """Returns the url to access a particular author instance."""
-#         return reverse('author-detail', args=[str(self.id)])
-
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.company_name}, {self.city},{self.country}'    
-
-
 class Event(models.Model):
     """Model representing a event."""
     title = models.CharField(max_length=200)
@@ -84,9 +24,11 @@ class Event(models.Model):
 
     rsvp_list = models.ManyToManyField(CustomUser, related_name = 'rsvp_list')
 
+    rsvp_capacity = models.IntegerField(default=0)
+    space_open = models.IntegerField(default=-1)
+
     EVENT_TYPE_CHOICES = (
         ('i','Infosession'),
-        ('a','infosession+Interview'),
         ('b','Interview Only'),
         # ('r', 'Reserved'), 
     )

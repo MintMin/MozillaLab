@@ -22,8 +22,14 @@
 
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item">{{event.main_recruiter}}</li>
-                            <li class="list-group-item">{{event.date}}</li>
-                            <!-- <li class="list-group-item">{{event.time}}</li> -->
+                            <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                            <li class="list-group-item"> Spaces Open:
+                                {% if event.rsvp_capacity != 0 %}
+                                {{event.space_open}}
+                                {% else %}
+                                No Limit!
+                                {% endif %}
+                            </li>
                           </ul>
                       </div> 
                       

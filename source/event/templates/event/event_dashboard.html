@@ -5,10 +5,21 @@
 {% block content %}
 
     {% if request.user.is_authenticated %}
-      
+
       <div class="headline">
         <h1>My Events
-        <button class="btn btn-success" onclick="location.href='{% url 'event:my_event_list' %}'">View All RSVP Events</button> 
+        <button class="btn btn-success" onclick="location.href='{% url 'event:my_event_list' %}'">
+            {% if request.user.is_recruiter %}
+                View All of Your Events
+            {% else %}
+                View all of Your RSVP Events
+            {% endif %}
+        </button>
+
+        {% if request.user.is_recruiter %}
+        <button class="btn btn-success" onclick="location.href='{% url 'event:create_event' %}'">Create Event</button>
+        {% endif %}
+
         </h1> 
       </div>
 
@@ -26,8 +37,13 @@
 
                       <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{event.main_recruiter}}</li>
-                        <li class="list-group-item">{{event.date}}</li>
-                        <!-- <li class="list-group-item">{{event.time}}</li> -->
+                        <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                        <li class="list-group-item"> Spaces Open:
+                            {% if event.rsvp_capacity != 0 %}
+                            {{event.space_open}}
+                            {% else %}
+                            No Limit!
+                            {% endif %}</li>
                       </ul>
                   </div> 
                   
@@ -51,8 +67,14 @@
 
             {% if all_events %}
           <!-- </div class="card-group"> -->
-              <ul>
+            <ul>
+                <div class="container">
                 {% for event in all_events %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                        <div class = "row">
+                     {% endif %}
+                        <div class="col-sm">
+
                   <div class="card border-info mb-3" style="max-width: 20rem;">
                     <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
                     <!-- <div class="card-header">Header</div> -->
@@ -64,21 +86,36 @@
 
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item">{{event.main_recruiter}}</li>
-                            <li class="list-group-item">{{event.date}}</li>
-                            <!-- <li class="list-group-item">{{event.time}}</li> -->
+                            <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                            <li class="list-group-item"> Spaces Open:
+                                {% if event.rsvp_capacity != 0 %}
+                                {{event.space_open}}
+                                {% else %}
+                                No Limit!
+                                {% endif %}</li>
                           </ul>
+
                       </div> 
                       
                       <div class="card-body">
                           <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
                           <a href="{% url 'event:rsvp' event.id %}" class="btn btn-success"> RSVP </a>
-                      </div> 
+                      </div>
+
                   </div>
+                  </div>
+
                   <!-- <li>
                     <a href="{% url 'event:detail' event.id %}">{{ event.title }}</a> {{event.company}}
                   </li> -->
+
+                    {% if forloop.counter|divisibleby:3 %}
+                    </div>
+                    {% endif %}
                 {% endfor %}
-              </ul>
+                </div>
+                </div>
+            </ul>
         
             {% else %}
               <p>There are no event in the library.</p>

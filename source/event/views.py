@@ -29,14 +29,17 @@ def detail(request, event_id):
 	rsvp = True
 	if(event in Event.objects.filter(rsvp_list__in = [request.user])):
 		rsvp = False
-	return render(request, 'event/view_event.html', {'event': event, 'rsvp_bool':rsvp})
+	return render(request, 'event/view_event.html', {'event': event, 'rsvp_bool': rsvp})
 
 def rsvp(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
 	user = request.user
-	event.rsvp_list.add(user)
-	# if(event.rsvp_list.filter(rsvp_list__in = [user])):
-	messages.success(request, _('You have successfully rsvpd for the event'))
+	if event.space_open != 0:
+		event.rsvp_list.add(user)
+		event.space_open -= 1
+		messages.success(request, _('You have successfully rsvpd for the event'))
+	else:
+		messages.error(request, _('Sorry! All spaces have been filled,'))
 	return redirect('index')
 
 class ViewEvent(TemplateView):
@@ -47,11 +50,18 @@ class EventDashboard(TemplateView):
 	def get_context_data(self, **kwargs):
 		request = self.request
 		context = super(EventDashboard, self).get_context_data(**kwargs)
+		not_in_event_list, counter = [], 0
 		if(request.user.is_recruiter):
-			context['event_list'] = Event.objects.filter(main_recruiter = request.user)
+			context['event_list'] = Event.objects.filter(main_recruiter = request.user).order_by('date')[:3]
 		elif(request.user.is_student):
-			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user])
-		context['all_events'] = Event.objects.all()
+			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user]).order_by('date')[:3]
+		for i in Event.objects.all().order_by('date'):
+			if counter == 6:
+				break
+			if i not in context['event_list']:
+				counter += 1
+				not_in_event_list.append(i)
+		context['all_events'] = not_in_event_list
 		return context
 
 # do I need to name a new class for event list page???
@@ -60,7 +70,7 @@ class EventList(TemplateView):
 	def get_context_data(self, **kwargs):
 		request = self.request
 		context = super(EventList, self).get_context_data(**kwargs)
-		context['all_events'] = Event.objects.all()
+		context['all_events'] = Event.objects.all().order_by('date')
 		return context
 
 class MyEventList(TemplateView):
@@ -69,11 +79,10 @@ class MyEventList(TemplateView):
 		request = self.request
 		context = super(MyEventList, self).get_context_data(**kwargs)
 		if(request.user.is_recruiter):
-			context['event_list'] = Event.objects.filter(main_recruiter = request.user)
+			context['event_list'] = Event.objects.filter(main_recruiter = request.user).order_by('date')
 		elif(request.user.is_student):
-			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user])
+			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user]).order_by('date')
 		return context
-
 
 class CreateEvent(CreateView):
 	template_name = 'event/create_event.html'
@@ -86,6 +95,7 @@ class CreateEvent(CreateView):
 		event = form.save()
 		request = self.request
 		event.main_recruiter = request.user
+		event.space_open = event.rsvp_capacity
 		form.save()
 		messages.success(request, _('You have successfully created your event'))
 		return redirect('index')
