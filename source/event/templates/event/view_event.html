@@ -8,9 +8,17 @@
     <p>Summary: {{ event.summary }}</p>
     <p>Date: {{ event.date }}</p>
     <p>Time: {{ event.time }}</p>
-    
-    {% if rsvp_bool %}
-        <button class="btn btn-success" onclick="location.href='{% url 'event:rsvp' event.id%}'"> RSVP</button>
+
+    {% if request.user.is_student %}
+        {% if rsvp_bool %}
+            <button class="btn btn-success" onclick="location.href='{% url 'event:rsvp' event.id%}'"> RSVP</button>
+        {% else %}
+            <a href="{% url 'event:un_rsvp' event.id %}" class="btn btn-success"> Unregister </a>
+        {% endif %}
+    {% elif request.user.is_recruiter %}
+        <button class="btn btn-warning" onclick="location.href='{% url 'event:delete_event' event.id%}'"> Delete Event</button>
+    {% else %}
+        {% trans 'You are a guest.' %}
     {% endif %}
 
     <script>

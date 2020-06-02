@@ -5,17 +5,17 @@
 {% block content %}
 
     {% if request.user.is_authenticated %}
-      
+
       <div class="headline">
-        <h1>My Events
+        <h1>My Past Events
         <!-- <button class="btn btn-success" onclick="location.href='{% url 'event:my_event_list' %}'">View All RSVP Events</button>  -->
-        </h1> 
+        </h1>
       </div>
 
-        {% if event_list %}
+        {% if past_event_list %}
              <ul>
                 <div class="container">
-                {% for event in event_list %}
+                {% for event in past_event_list %}
                     {% if forloop.counter0|divisibleby:3 %}
                         <div class = "row">
                      {% endif %}
@@ -45,7 +45,6 @@
 
                   <div class="card-body">
                       <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
-                      <a href="{% url 'event:un_rsvp' event.id %}" class="btn btn-success"> Unregister </a>
                   </div>
 
             </div>
@@ -57,7 +56,7 @@
                     <div class="col-sm"> </div>
           </ul>
         {% else %}
-          <p>There are no event in the library.</p>
+          <p>There are no events in the library.</p>
         {% endif %}
 
     {% else %}

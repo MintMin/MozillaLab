@@ -23,6 +23,8 @@ from django.views.generic import TemplateView, CreateView
 from .models import Event
 from accounts.models import Recruiter
 from .forms import CreateEventForm
+from django.http import HttpResponseRedirect
+from datetime import datetime, timedelta
 
 def detail(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
@@ -37,10 +39,26 @@ def rsvp(request, event_id):
 	if event.space_open != 0:
 		event.rsvp_list.add(user)
 		event.space_open -= 1
+		event.save()
 		messages.success(request, _('You have successfully rsvpd for the event'))
 	else:
 		messages.error(request, _('Sorry! All spaces have been filled,'))
-	return redirect('index')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def un_rsvp(request, event_id):
+	event = get_object_or_404(Event, pk=event_id)
+	user = request.user
+	event.rsvp_list.remove(user)
+	event.space_open += 1
+	event.save()
+	messages.success(request, _('You have successfully unregistered to the event'))
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def delete_event(request, event_id):
+	event = get_object_or_404(Event, pk=event_id)
+	event.delete()
+	messages.success(request, _('You have successfully deleted your event!'))
+	return HttpResponseRedirect('/event')
 
 class ViewEvent(TemplateView):
     template_name = 'event/view_event.html'
@@ -52,16 +70,28 @@ class EventDashboard(TemplateView):
 		context = super(EventDashboard, self).get_context_data(**kwargs)
 		not_in_event_list, counter = [], 0
 		if(request.user.is_recruiter):
-			context['event_list'] = Event.objects.filter(main_recruiter = request.user).order_by('date')[:3]
+			context['event_list'] = Event.objects.filter(
+				main_recruiter = request.user, date__gte = datetime.now() - timedelta(days=1)).order_by('date')[:3]
 		elif(request.user.is_student):
-			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user]).order_by('date')[:3]
-		for i in Event.objects.all().order_by('date'):
+			context['event_list'] = Event.objects.filter(
+				rsvp_list__in = [request.user], date__gte = datetime.now() - timedelta(days=1)).order_by('date')[:3]
+
+		for i in Event.objects.filter(date__gte = datetime.now() - timedelta(days=1)).order_by('date'):
 			if counter == 6:
 				break
 			if i not in context['event_list']:
 				counter += 1
 				not_in_event_list.append(i)
+
 		context['all_events'] = not_in_event_list
+
+		if (request.user.is_recruiter):
+			context['past_event_list'] = Event.objects.filter(
+				main_recruiter=request.user, date__lte=datetime.now() - timedelta(days=1)).order_by('date')[:3]
+		elif (request.user.is_student):
+			context['past_event_list'] = Event.objects.filter(
+				rsvp_list__in=[request.user], date__lte=datetime.now() - timedelta(days=1)).order_by('date')[:3]
+
 		return context
 
 # do I need to name a new class for event list page???
@@ -70,7 +100,9 @@ class EventList(TemplateView):
 	def get_context_data(self, **kwargs):
 		request = self.request
 		context = super(EventList, self).get_context_data(**kwargs)
-		context['all_events'] = Event.objects.all().order_by('date')
+		context['all_events'] = Event.objects.filter(
+			date__gte = datetime.now() - timedelta(days=1)
+		).order_by('date')
 		return context
 
 class MyEventList(TemplateView):
@@ -79,9 +111,11 @@ class MyEventList(TemplateView):
 		request = self.request
 		context = super(MyEventList, self).get_context_data(**kwargs)
 		if(request.user.is_recruiter):
-			context['event_list'] = Event.objects.filter(main_recruiter = request.user).order_by('date')
+			context['event_list'] = Event.objects.filter(
+				main_recruiter = request.user, date__gte = datetime.now() - timedelta(days=1)).order_by('date')
 		elif(request.user.is_student):
-			context['event_list'] = Event.objects.filter(rsvp_list__in = [request.user]).order_by('date')
+			context['event_list'] = Event.objects.filter(
+				rsvp_list__in = [request.user], date__gte = datetime.now() - timedelta(days=1)).order_by('date')
 		return context
 
 class CreateEvent(CreateView):
@@ -98,4 +132,17 @@ class CreateEvent(CreateView):
 		event.space_open = event.rsvp_capacity
 		form.save()
 		messages.success(request, _('You have successfully created your event'))
-		return redirect('index')
+		return HttpResponseRedirect('/event')
+
+class PastEventList(TemplateView):
+	template_name = 'event/past_event.html'
+	def get_context_data(self, **kwargs):
+		request = self.request
+		context = super(PastEventList, self).get_context_data(**kwargs)
+		if(request.user.is_recruiter):
+			context['past_event_list'] = Event.objects.filter(
+				main_recruiter = request.user, date__lte = datetime.now() - timedelta(days=1)).order_by('date')
+		elif(request.user.is_student):
+			context['past_event_list'] = Event.objects.filter(
+				rsvp_list__in = [request.user], date__lte = datetime.now() - timedelta(days=1)).order_by('date')
+		return context
