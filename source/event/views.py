@@ -31,7 +31,10 @@ def detail(request, event_id):
 	rsvp = True
 	if(event in Event.objects.filter(rsvp_list__in = [request.user])):
 		rsvp = False
-	return render(request, 'event/view_event.html', {'event': event, 'rsvp_bool': rsvp})
+	past = False
+	if(event.date < datetime.now().date()):
+		past = True
+	return render(request, 'event/view_event.html', {'event': event, 'rsvp_bool': rsvp, 'past':past})
 
 def rsvp(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
