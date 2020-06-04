@@ -23,6 +23,9 @@ from django.views.generic import TemplateView, CreateView
 from .models import Event
 from accounts.models import Recruiter
 from .forms import CreateEventForm
+import json
+from zoomus import ZoomClient
+from datetime import datetime
 
 def detail(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
@@ -68,6 +71,14 @@ class CreateEvent(CreateView):
 		event = form.save()
 		request = self.request
 		event.main_recruiter = request.user
+		with ZoomClient('BLKlHrYJQE2Zfc5VN7YgmQ', 'X729m575QKEgWrymCCNjICxE13TJTfzf43sO') as client:
+			startTime = datetime(2020,5,28,3,00,00)
+			create_meeting_response = client.meeting.create(user_id='me')
+			create_meeting_json = create_meeting_response.json()
+			print(create_meeting_json)
+			event.zoom_url = create_meeting_json['join_url']
+
+    	
 		form.save()
 		messages.success(request, _('You have successfully created your event'))
 		return redirect('index')

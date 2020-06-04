@@ -6,6 +6,11 @@
 
     {% if request.user.is_authenticated %}
         <h1>Your Events</h1>
+        {% if request.user.is_recruiter %}
+
+        <a class="btn btn-info" href="{% url 'event:create_event' %}"  target="_blank" role="button">Create Event</a>
+        {% endif %}     
+
         {% if event_list %}
         <ul>
           {% for event in event_list %}

@@ -75,6 +75,7 @@ class Event(models.Model):
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null = True, blank = True)
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the event')
+    zoom_url = models.CharField(max_length=1000)
     
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
