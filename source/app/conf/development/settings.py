@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user_profile',
     'interview',
     'infosession',
+    'career_fair',
 ]
 
 MIDDLEWARE = [

@@ -20,6 +20,7 @@ urlpatterns = [
     path('calendar/', include('calendars.urls')),
     path('infosession/', include('infosession.urls')),
     path('interview/', include('interview.urls')),
+    path('career_fair/', include('career_fair.urls')),
 
 ]
 

@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     LogInView, ResendActivationCodeView, RemindUsernameView, RecruiterSignUpView, SignUpView, ActivateView, LogOutView,
     ChangeEmailView, ChangeEmailActivateView, ChangeProfileView, ChangePasswordView,
-    RestorePasswordView, RestorePasswordDoneView, RestorePasswordConfirmView, StudentSignUpView
+    RestorePasswordView, RestorePasswordDoneView, RestorePasswordConfirmView, StudentSignUpView,RecruiterProfileView
 )
 
 from django.conf.urls import url
@@ -34,7 +34,8 @@ urlpatterns = [
     path('change/email/', ChangeEmailView.as_view(), name='change_email'),
     path('change/email/<code>/', ChangeEmailActivateView.as_view(), name='change_email_activation'),
 
-    path('student-profile', StudentProfileView.as_view(), name='student-profile'),
+    path('student-profile', StudentProfileView.as_view(), name='student_profile'),
+    path('recruiter-profile', RecruiterProfileView.as_view(), name='recruiter_profile'),
     url(r'^major-autocomplete/$', AutocompleteMajor.as_view(), name='major-autocomplete'),
     url(r'^uni-autocomplete/$', AutocompleteUni.as_view(), name='uni-autocomplete'),
     url(r'^career-autocomplete/$', AutocompleteCareerInt.as_view(), name='career-autocomplete'),
