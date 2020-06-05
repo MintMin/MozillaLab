@@ -5,12 +5,13 @@ from accounts.models import CustomUser
 class Career_Fair(models.Model):
     """Model representing a career_fair."""
     university = models.CharField(max_length=100)
-    date = models.DateField(null=True, blank=True)
-    time = models.TimeField(null = True, blank = True)
+    firstdate = models.DateField(null=True, blank=True)
+    lastdate = models.DateField(null = True, blank = True)
+
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.university}, {self.date}, {self.time}' 
+        return f'{self.university}, {self.firstdate}, {self.lastdate}' 
         
 class Career_Booth(models.Model):
 	""" Model representing a booth in a career fair"""
@@ -26,7 +27,7 @@ class Career_Booth(models.Model):
 	(10,'Ten minutes'),
 	)
 
-	interview_duration = models.CharField(
+	interview_duration = models.IntegerField(
 	max_length=1,
 	choices=INTERVIEW_DURATION,
 	blank=False,
@@ -40,13 +41,14 @@ class Career_Booth(models.Model):
 	(4,'Four minutes'),
 	)
 
-	rest_duration = models.CharField(
+	rest_duration = models.IntegerField(
 	max_length=1,
 	choices=REST_DURATION,
 	blank=False,
 	default=2,
 	help_text='How long do you need to rest between interactions?',
 	)
+	date = models.DateField(null=True, blank=True)
 	time_start = models.TimeField(null = True, blank = True)
 	time_end = models.TimeField(null = True, blank = True)
 	university = models.CharField(max_length=100)

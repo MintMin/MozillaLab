@@ -3,23 +3,13 @@
 {% load i18n %}
 
 {% block content %}
-
-    {% if request.user.is_authenticated %}
-
-      <div class="headline">
-        <h1>Upcoming Career Fairs
-
-        {% if request.user.is_recruiter %}
-          <a href="{% url 'career_fair:create-booth'%}" class="btn btn-info"> Create Booth</a>
-        {% endif %}
-
-        </h1> 
-      </div>
-
-        {% if career_list %}
+    <p>University: {{ event.university }}</p>
+    <p>Start Date: {{ event.firstdate }}</p>
+    <p>End Date: {{ event.lastdate }}</p>
+    {% if booths %}
              <ul>
                 <div class="container">
-                {% for event in career_list %}
+                {% for booth in booths %}
                     {% if forloop.counter0|divisibleby:3 %}
                         <div class = "row">
                      {% endif %}
@@ -31,13 +21,19 @@
                 <!-- <div class="card-header">Header</div> -->
               
                   <div class="card-body text-dark">
-                      <h5 class="card-title bg-info text-white ">{{event.university}}</h5>
-                      <p class="list-group-item">{{event.firstdate}} to {{event.lastdate}}</p>
+                      <h5 class="card-title bg-info text-white ">{{booth.company}}</h5>
+                      <p class="card-text">{{booth.recruiter}}</p>
+                      
+
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{booth.date}} from {{booth.time_start}} to {{booth.time_end}}</li>
+                      </ul>
                   </div>
 
                   <div class="card-body">
-                     <a href="{% url 'career_fair:detail' event.id %}" class="btn btn-info"> View Booths</a>
+<!-- Here we would add a button to sign up for a slot-->
                   </div>
+
             </div>
             </div>
                     {% if forloop.counter|divisibleby:3 %}
@@ -46,14 +42,14 @@
                 {% endfor %}
                     <div class="col-sm"> </div>
           </ul>
-        {% else %}
-          <p>There are no event in the library.</p>
-        {% endif %}     
-        
-    {% else %}
+        {% endif %}  
+    <script>
+        function goBack()
+        {
+            window.history.back()
+        }
+    </script>
+    <input class="btn btn-primary" type="button" value="<<Back" onclick="goBack()">
 
-        {% trans 'You are a guest.' %}
-
-    {% endif %}
-
+    
 {% endblock %}
