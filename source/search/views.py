@@ -49,3 +49,34 @@ def run_search(request):
 
         result_list = Event.objects.filter(title__icontains=keyword)   # i: ... icontains -- field lookups
         return render(request, 'search/run_search.html', {'error_msg': error_msg,'result_list': result_list})
+
+
+# def filter(request,*args,**kwargs):
+
+#     print(kwargs)
+
+#     condition = {}
+
+#     for k,v in kwargs.items():
+#         kwargs[k] = int(v)
+#         if v == "0":
+#             pass
+#         else:
+#             condition[k] = v
+
+#     type_list = Event.objects.values('Event_type')
+#     # recruiter_list = Event.objects.all(main_recruiter__icontains=keyword)
+#     # company_list = Event.objects.all(company__icontains=keyword)
+#     # job_list = Category.objects.all()
+#     # date filter
+
+# # result = models.Article.objects.filter(article_type_id=kwargs["article_type_id"],category_id=kwargs["category_id"])
+
+#     result = Event.objects.filter(**condition)
+    
+#     return render(request,'article.html',{
+#                         'result':result,
+#                         'type_list':type_list,
+#                         # 'category_list':category_list,
+#                         'arg_dict':kwargs,
+#                     })
