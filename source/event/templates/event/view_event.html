@@ -10,7 +10,16 @@
     <p>Time: {{ event.time }}</p>
     {% if rsvp_bool %}
 <input class="btn btn-success" type="button" value="RSVP" onclick="location.href='{% url 'event:rsvp' event.id%}'"  />
-<a class="btn btn-info" href= {{event.zoom_url}} target="_blank" role="button">Join Meeting</a>
+
+{% if request.user ==  event.main_recruiter %}
+<a class="btn btn-info" href= {{event.start_zoom_url}} target="_blank" role="button">Start Meeting</a>
+<a class="btn btn-info" href= {{event.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
+{% endif %}
+
+{% if request.user.is_student %}
+<a class="btn btn-info" href= {{event.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
+{% endif %}
+
 {% endif %}
 
     

@@ -26,6 +26,7 @@ from .forms import CreateEventForm
 import json
 from zoomus import ZoomClient
 from datetime import datetime
+from django.utils.dateparse import parse_datetime
 
 def detail(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
@@ -71,12 +72,15 @@ class CreateEvent(CreateView):
 		event = form.save()
 		request = self.request
 		event.main_recruiter = request.user
+		print(event.date+'T'+event.time)
+
 		with ZoomClient('BLKlHrYJQE2Zfc5VN7YgmQ', 'X729m575QKEgWrymCCNjICxE13TJTfzf43sO') as client:
-			startTime = datetime(2020,5,28,3,00,00)
-			create_meeting_response = client.meeting.create(user_id='me')
+			startTime = datetime(2020,6,3,2,30,00)
+			create_meeting_response = client.meeting.create(user_id='me', start_time = startTime)
 			create_meeting_json = create_meeting_response.json()
-			print(create_meeting_json)
-			event.zoom_url = create_meeting_json['join_url']
+			event.join_zoom_url = create_meeting_json['join_url']
+			event.start_zoom_url = create_meeting_json['start_url']
+
 
     	
 		form.save()
