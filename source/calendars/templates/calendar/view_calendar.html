@@ -3,9 +3,11 @@
 {% load i18n %}
 {% load static %}
 
-<!-- {% block css %}
-    <link href="{% static 'plugins/fullcalendar/fullcalendar.min.css' %}" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.6.1/fullcalendar.min.css" rel="stylesheet">
+{% block css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" rel="stylesheet">
 
 {% endblock %} -->
 
@@ -33,13 +35,25 @@
 {% endblock %}
 
 {% block javascripts %}
-    <!-- <script src="{% static 'plugins/daterangepicker/moment.min.js' %}"></script>
-    <script src="{% static 'plugins/fullcalendar/fullcalendar.min.js' %}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script> 
+
     <script type="text/javascript">
     $(function () {
             //initialize FullCalendar
             $('#calendar').fullCalendar({
 
+            //defaultView: 'agendaWeek',
+            contentHeight: 650,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            //show weekends
+            weekends: true,
             });
         });
 
