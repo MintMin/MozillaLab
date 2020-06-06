@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block css %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" rel="stylesheet">ttps://cdnjs.cloudflare.com/a
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" rel="stylesheet">
@@ -30,7 +30,7 @@
         </div>
     </section>
 
-    <!-- /.content -->
+    /.content
 
 {% endblock %}
 
@@ -40,7 +40,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script> 
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
     $(function () {
             //initialize FullCalendar
             $('#calendar').fullCalendar({
@@ -57,5 +57,20 @@
             });
         });
 
-    </script>
+    </script> -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+  
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ]
+          });
+  
+          calendar.render();
+        });
+  
+      </script>
+
 {% endblock %}
