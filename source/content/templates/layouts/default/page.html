@@ -22,6 +22,8 @@
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
+        {% block css %} {% endblock %}
+
 </head>
 
 <body>
@@ -123,6 +125,8 @@
 <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 
 <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+
+{% block javascripts %}{% endblock %}
 
 </body>
 </html>
