@@ -21,12 +21,59 @@ from django.views.generic import View, FormView
 from django.conf import settings
 from django.views.generic import TemplateView
 
+from event.models import Event
+from accounts.models import Recruiter
+from event.forms import CreateEventForm
+from django.http import HttpResponseRedirect
+from datetime import datetime, timedelta
 
 
+# @method_decorator(login_required, name='dispatch')
 class ViewCalendar(TemplateView):
-    template_name = 'calendar/view_calendar.html'
+	template_name = 'calendar/view_calendar.html'
 
-class TestCalendar(TemplateView):
-    template_name = 'calendar/test.html'
+	def get_context_data(self, **kwargs):
+		request = self.request
+		context = super(ViewCalendar, self).get_context_data(**kwargs)
+
+		if(request.user.is_recruiter):
+			context['event_list'] = Event.objects.filter(
+			main_recruiter = request.user)
+
+		elif(request.user.is_student):
+			context['event_list'] = Event.objects.filter(
+			rsvp_list__in = [request.user])
+
+		return context
+
+
+
+# @method_decorator(login_required, name='dispatch')
+# class ViewCalendar(TemplateView):
+#     template_name = 'calendar/view_calendar.html'
+#     form_class = EventForm
+
+#     def get_context_data(self, **kwargs):
+#         context = super(ViewCalendar, self).get_context_data(**kwargs)
+#         context['eventlist'] = Event.objects.all()
+
+	
+		# if(request.user.is_recruiter):
+		# 	context['event_list'] = Event.objects.filter(
+		# 		main_recruiter = request.user, date__gte = datetime.now() - timedelta(days=1)).order_by('date')[:3]
+		# elif(request.user.is_student):
+		# 	context['event_list'] = Event.objects.filter(
+		# 		rsvp_list__in = [request.user], date__gte = datetime.now() - timedelta(days=1)).order_by('date')[:3]
+
+	# 	if (request.user.is_recruiter):
+	# 		context['past_event_list'] = Event.objects.filter(
+	# 			main_recruiter=request.user, date__lte=datetime.now() - timedelta(days=1)).order_by('date')[:3]
+	# 	elif (request.user.is_student):
+	# 		context['past_event_list'] = Event.objects.filter(
+	# 			rsvp_list__in=[request.user], date__lte=datetime.now() - timedelta(days=1)).order_by('date')[:3]
+
+        # return context
+
+
 
 
