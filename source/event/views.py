@@ -23,6 +23,9 @@ from django.views.generic import TemplateView, CreateView
 from .models import Event
 from accounts.models import Recruiter
 from .forms import CreateEventForm
+import json
+from zoomus import ZoomClient
+from django.utils.dateparse import parse_datetime
 from django.http import HttpResponseRedirect
 from datetime import datetime, timedelta
 
@@ -128,11 +131,28 @@ class CreateEvent(CreateView):
 	def save(self, *args, **kwargs):
 		self.absolute_url = self.get_absolute_url()
 		super(event, self).save(*args, **kwargs)
+    
 	def form_valid(self, form):
 		event = form.save()
 		request = self.request
 		event.main_recruiter = request.user
 		event.space_open = event.rsvp_capacity
+		with ZoomClient('BLKlHrYJQE2Zfc5VN7YgmQ', 'X729m575QKEgWrymCCNjICxE13TJTfzf43sO') as client:
+			date_str = str(event.date)
+			time_str = str(event.time)
+			year = int(date_str[:4])
+			month = int(date_str[5:7])
+			day = int(date_str[8:])
+			HH = int(time_str[:2])
+			MM = int(time_str[3:5])
+			SS = 00
+			startTime = datetime(year,month,day,HH,MM,SS)
+			create_meeting_response = client.meeting.create(user_id='me', start_time = startTime)
+			create_meeting_json = create_meeting_response.json()
+			event.join_zoom_url = create_meeting_json['join_url']
+			event.start_zoom_url = create_meeting_json['start_url']
+		  event.space_open = event.rsvp_capacity
+      
 		form.save()
 		messages.success(request, _('You have successfully created your event'))
 		return HttpResponseRedirect('/event')

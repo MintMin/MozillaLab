@@ -9,7 +9,8 @@
       <div class="headline">
         <h1>My Events
         <button class="btn btn-success" onclick="location.href='{% url 'event:my_event_list' %}'">
-            {% if request.user.is_recruiter %}
+            {% if 
+          _recruiter %}
                 View All of Your Events
             {% else %}
                 View all of Your RSVP Events
@@ -22,7 +23,6 @@
 
         </h1> 
       </div>
-
         {% if event_list %}
              <ul>
                 <div class="container">
