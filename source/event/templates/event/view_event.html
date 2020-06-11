@@ -7,7 +7,8 @@
     <p>Recruiter: {{ event.main_recruiter }}</p>
     <p>Summary: {{ event.summary }}</p>
     <p>Date: {{ event.date }}</p>
-    <p>Time: {{ event.time }}</p>
+    <p>Time: From {{ event.start_time }} to {{ event.end_time }}</p>
+
     {% if event in past_event_list %}
         {% trans 'This event has already occurred.' %}
     {% else %}

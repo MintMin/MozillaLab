@@ -141,7 +141,7 @@ class CreateEvent(CreateView):
 		event.space_open = event.rsvp_capacity
 		with ZoomClient('BLKlHrYJQE2Zfc5VN7YgmQ', 'X729m575QKEgWrymCCNjICxE13TJTfzf43sO') as client:
 			date_str = str(event.date)
-			time_str = str(event.time)
+			time_str = str(event.start_time)
 			year = int(date_str[:4])
 			month = int(date_str[5:7])
 			day = int(date_str[8:])

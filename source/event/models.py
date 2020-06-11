@@ -13,7 +13,8 @@ class Event(models.Model):
     # company = models.ForeignKey('Company', on_delete=models.SET_NULL, null=True)
     
     date = models.DateField(null=True, blank=True)
-    time = models.TimeField(null = True, blank = True)
+    start_time = models.TimeField(null = True, blank = True)
+    end_time = models.TimeField(null = True, blank = True)
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the event')
     join_zoom_url = models.CharField(max_length=1000)
     start_zoom_url = models.CharField(max_length=1000)

@@ -44,7 +44,7 @@
 
                       <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{event.main_recruiter}}</li>
-                        <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                        <li class="list-group-item">{{event.date}}: from {{event.start_time}} to {{event.end_time}}</li>
                         <li class="list-group-item"> Spaces Open:
                             {% if event.rsvp_capacity != 0 %}
                             {{event.space_open}}
@@ -100,7 +100,7 @@
 
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item">{{event.main_recruiter}}</li>
-                            <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                            <li class="list-group-item">{{event.date}}: from {{event.start_time}} to {{event.end_time}}</li>
                             <li class="list-group-item"> Spaces Open:
                                 {% if event.rsvp_capacity != 0 %}
                                 {{event.space_open}}
@@ -170,7 +170,7 @@
 
                       <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{event.main_recruiter}}</li>
-                        <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                        <li class="list-group-item">{{event.date}}: from {{event.start_time}} to {{event.end_time}}</li>
                         <li class="list-group-item"> Spaces Open:
                             {% if event.rsvp_capacity != 0 %}
                             {{event.space_open}}
