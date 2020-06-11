@@ -1,0 +1,57 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+    	{% if request.user.is_recruiter %}
+    		  <div class="row">
+			    <div class="col-md-8 col-sm-10 col-12">
+			      <h2>Create your booth</h2>
+			      <form method="post" novalidate>
+			        {% csrf_token %}
+			        <input type="hidden" name="next" value="{{ next }}">
+			        {{ form|crispy }}
+					</script>
+			        <button type="submit" class="btn btn-success">Submit</button>
+			      </form>
+			    </div>
+			  </div>
+    	{% else %}
+    		You are not a recruiter, thus, cannot create an event
+    	{% endif %}
+    {% else %}
+    	You are not authenticated. Please validate your email to create an event.
+    {% endif %}
+
+{% endblock %}
+
+
+{% block footer %}
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form.media }}
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>
+
+{% endblock %}

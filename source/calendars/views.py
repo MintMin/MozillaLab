@@ -26,4 +26,7 @@ from django.views.generic import TemplateView
 class ViewCalendar(TemplateView):
     template_name = 'calendar/view_calendar.html'
 
+class TestCalendar(TemplateView):
+    template_name = 'calendar/test.html'
+
 

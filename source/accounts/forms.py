@@ -282,6 +282,14 @@ class RemindUsernameForm(UserCacheMixin, forms.Form):
 
         return email
 
+class RecruiterProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'first_name','last_name', 'company']
+    first_name = forms.CharField(label='your first name')#, default = self.user.first_name)
+    last_name = forms.CharField(label='your last name')#, default = self.user.last_name)
+    company = forms.CharField(max_length = 200)
+
 def major_list():
     return settings.MAJOR_LIST
 

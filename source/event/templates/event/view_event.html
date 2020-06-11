@@ -8,19 +8,28 @@
     <p>Summary: {{ event.summary }}</p>
     <p>Date: {{ event.date }}</p>
     <p>Time: {{ event.time }}</p>
-    {% if rsvp_bool %}
-<input class="btn btn-success" type="button" value="RSVP" onclick="location.href='{% url 'event:rsvp' event.id%}'"  />
-
-{% if request.user ==  event.main_recruiter %}
-<a class="btn btn-info" href= {{event.start_zoom_url}} target="_blank" role="button">Start Meeting</a>
-<a class="btn btn-info" href= {{event.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
-{% endif %}
-
-{% if request.user.is_student %}
-<a class="btn btn-info" href= {{event.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
-{% endif %}
-
-{% endif %}
-
+{% if past %}
+    {% else %}
+        {% if request.user.is_student %}
+            {% if rsvp_bool %}
+                <button class="btn btn-success" onclick="location.href='{% url 'event:rsvp' event.id%}'"> RSVP</button>
+                <a class="btn btn-info" href= {{event.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
+            {% else %}
+                <a href="{% url 'event:un_rsvp' event.id %}" class="btn btn-success"> Unregister </a>
+            {% endif %}
+        {% elif request.user.is_recruiter %}
+            <a class="btn btn-info" href= {{event.start_zoom_url}} target="_blank" role="button">Start Meeting</a>
+            <button class="btn btn-warning" onclick="location.href='{% url 'event:delete_event' event.id%}'"> Delete Event</button>
+        {% else %}
+            {% trans 'You are a guest.' %}
+        {% endif %}
+    {% endif %}
+    <script>
+        function goBack()
+        {
+            window.history.back()
+        }
+    </script>
+    <input class="btn btn-primary" type="button" value="<<Back" onclick="goBack()">
     
 {% endblock %}

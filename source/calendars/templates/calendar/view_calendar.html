@@ -1,12 +1,136 @@
 {% extends 'layouts/default/page.html' %}
 
 {% load i18n %}
+{% load static %}
 
-    {% block content %}
-      <p>This is the calendar page. </p>
-    <h1>Scheduled Events (info-session+interview)</h1>
-    <ul>
-      <li><a href="{% url 'event:example_event' %}"> Event Example #1: Google Summer Intern </a></li>
-      <li><a href="">Event Example #2: Facebook Summer Intern (not clickable)</a></li>
-    </ul>
-    {% endblock %}
+{% block css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" rel="stylesheet">
+
+{% endblock %} -->
+
+{% block content %}
+    <section class="content-header margin-bottom">
+        <ol class="breadcrumb">
+            <li><a href="">My Events</a></li>
+            <li><a href="#">All Events</a></li>
+          
+
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-body no-padding">
+                <!-- THE CALENDAR -->
+                <div id="calendar">
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </section>
+
+    <!-- /.content -->
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script> 
+
+    <!-- <script type="text/javascript">
+    $(function () {
+            //initialize FullCalendar
+            $('#calendar').fullCalendar({
+
+            //defaultView: 'agendaWeek',
+            contentHeight: 650,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            //show weekends
+            weekends: true,
+            });
+        });
+
+    </script> -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+  
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+
+            defaultView: 'dayGridMonth',
+            header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+
+            events: [
+            {
+                title: 'All Day Event',
+                start: '2020-06-01'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-06-07',
+                end: '2020-06-10'
+            },
+            {
+                groupId: '999',
+                title: 'Repeating Event',
+                start: '2020-06-09T16:00:00'
+            },
+            {
+                groupId: '999',
+                title: 'Repeating Event',
+                start: '2020-06-16T16:00:00'
+            },
+            {
+                title: 'Conference',
+                start: '2020-06-11',
+                end: '2020-06-13'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-05-12T10:30:00',
+                end: '2020-05-12T12:30:00'
+            },
+            {
+                title: 'Lunch',
+                start: '2020-05-12T12:00:00'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-05-12T14:30:00'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-05-13T07:00:00'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-05-28'
+            }
+            ]
+
+            
+          });
+  
+          calendar.render();
+        });
+  
+    </script>
+
+{% endblock %}

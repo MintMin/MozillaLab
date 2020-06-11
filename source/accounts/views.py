@@ -27,7 +27,7 @@ from .utils import (
     send_activation_email, send_reset_password_email, send_forgotten_username_email, send_activation_change_email,
 )
 from .forms import (
-    SignInViaUsernameForm, StudentSignUpForm, SignInViaEmailForm, SignInViaEmailOrUsernameForm,
+    SignInViaUsernameForm, RecruiterProfileForm,StudentSignUpForm, SignInViaEmailForm, SignInViaEmailOrUsernameForm,
     RestorePasswordForm, RestorePasswordViaEmailOrUsernameForm, RemindUsernameForm,
     ResendActivationCodeForm, RecruiterSignUpForm,  ResendActivationCodeViaEmailForm, ChangeProfileForm, ChangeEmailForm, 
     )
@@ -420,6 +420,39 @@ class RestorePasswordDoneView(BasePasswordResetDoneView):
 class LogOutView(LoginRequiredMixin, BaseLogoutView):
     template_name = 'accounts/log_out.html'
 
+
+class RecruiterProfileView(View):
+    template_name = 'accounts/student_profile.html'
+    form_class = RecruiterProfileForm
+    # Handle GET HTTP requests
+    def get(self, request, *args, **kwargs):
+        # student = Student.objects.get(id = request.user.id) # just an example
+        recruiter = get_object_or_404(Recruiter, user_id = self.request.user)
+        data = {'first_name': recruiter.user.first_name,
+                'last_name': recruiter.user.last_name,
+                'email': recruiter.user.email,
+                'company': recruiter.company}
+        form = self.form_class(initial=data)
+        return render(request, self.template_name, {'form': form})
+
+    # Handle POST GTTP requests
+    def post(self, request, *args, **kwargs):
+        # form = self.form_class(instance=Student, data=request.POST)
+        # if form.is_valid():
+        #     # instance = form.save(commit=False)
+        #     # instance.student = request.user
+        #     # instance.save()
+        #     pass
+
+        form = self.form_class(data = request.POST, instance=request.user)
+        if form.is_valid():
+            # <process form cleaned data>
+            form.save()
+            # instance.student = request.user
+            # instance.save()
+            return redirect('index')
+
+        return render(request, self.template_name, {'form': form})
 
 class StudentProfileView(View):
     template_name = 'accounts/student_profile.html'

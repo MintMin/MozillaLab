@@ -20,6 +20,9 @@
 
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+        {% block css %} {% endblock %}
 
 </head>
 
@@ -42,22 +45,29 @@
                     </button> 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{% url 'accounts:change_password' %}">{% trans 'Change password' %}</a>
-                        <a class="dropdown-item" href="{% url 'accounts:change_profile' %}">{% trans 'Change profile' %}</a>
+                        {% if request.user.is_recruiter %}
+                            <a class="dropdown-item" href="{% url 'accounts:recruiter_profile' %}">{% trans 'Update profile' %}</a>
+                        {% else %}
+                            <a class="dropdown-item" href="{% url 'accounts:student_profile' %}">{% trans 'Update profile' %}</a>
+                        {% endif %}
                         <a class="dropdown-item" href="{% url 'accounts:change_email' %}">{% trans 'Change email' %}</a>
                         <a class="dropdown-item" href="{% url 'accounts:log_out' %}">{% trans 'Log out' %}</a>
 
                     </div>
                 </div>
 
-                <li class="nav-item">
+         <!--        <li class="nav-item">
                         <a class="nav-link" href="{% url 'user_profile:view_profile' %}">{% trans 'Profile' %}</a>
-                </li>
+                </li> -->
 
                 <li class="nav-item">
                         <a class="nav-link" href="{% url 'calendars:view_calendar' %}">{% trans 'Calendar' %}</a>
                 </li>
                 <li class="nav-item">
                         <a class="nav-link" href="{% url 'event:event_dashboard' %}">{% trans 'Events' %}</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="{% url 'career_fair:career_fair_dashboard' %}">{% trans 'Career Fair' %}</a>
                 </li>
 
 
@@ -81,19 +91,21 @@
 
 
         <ul class="navbar-nav">
-                <li>
-                        <div class = "search">
-                                <form class="example" action="{% url 'search:run_search' %}" >
-                                        <input type="text" placeholder="Search.." name="search">
-                                        <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
-                            </div>
-                        </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
-                </li>
+            <li>
+                <div class = "search">
+                    <form class="example" action="{% url 'search:run_search' %}" >
+                        {% csrf_token %}
+                        <input type="text" placeholder="Search.." name="keyword">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </li>
 
-            </ul>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
+            </li>
+
+        </ul>
     </div>
 
 </nav>
@@ -113,6 +125,8 @@
 <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 
 <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+
+{% block javascripts %}{% endblock %}
 
 </body>
 </html>

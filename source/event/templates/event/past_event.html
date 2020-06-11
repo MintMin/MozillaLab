@@ -1,0 +1,68 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+
+      <div class="headline">
+        <h1>My Past Events
+        <!-- <button class="btn btn-success" onclick="location.href='{% url 'event:my_event_list' %}'">View All RSVP Events</button>  -->
+        </h1>
+      </div>
+
+        {% if past_event_list %}
+             <ul>
+                <div class="container">
+                {% for event in past_event_list %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                        <div class = "row">
+                     {% endif %}
+                        <div class="col-sm">
+
+
+              <div class="card border-info mb-3" style="max-width: 20rem;">
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <!-- <div class="card-header">Header</div> -->
+
+                  <div class="card-body text-dark">
+                      <h5 class="card-title bg-info text-white ">{{event.title}}</h5>
+                      <p class="card-text">{{event.summary}}</p>
+
+
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{event.main_recruiter}}</li>
+                        <li class="list-group-item">{{event.date}} at {{event.time}}</li>
+                        <li class="list-group-item"> Spaces Open:
+                            {% if event.rsvp_capacity != 0 %}
+                            {{event.space_open}}
+                            {% else %}
+                            No Limit!
+                            {% endif %}</li>
+                      </ul>
+                  </div>
+
+                  <div class="card-body">
+                      <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
+                  </div>
+
+            </div>
+            </div>
+                    {% if forloop.counter|divisibleby:3 %}
+              </div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="col-sm"> </div>
+          </ul>
+        {% else %}
+          <p>There are no events in the library.</p>
+        {% endif %}
+
+    {% else %}
+
+        {% trans 'You are a guest.' %}
+
+    {% endif %}
+
+{% endblock %}
