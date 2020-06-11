@@ -28,6 +28,8 @@ from zoomus import ZoomClient
 from django.utils.dateparse import parse_datetime
 from django.http import HttpResponseRedirect
 from datetime import datetime, timedelta
+from dateutil import tz
+
 
 def detail(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
@@ -131,7 +133,7 @@ class CreateEvent(CreateView):
 	def save(self, *args, **kwargs):
 		self.absolute_url = self.get_absolute_url()
 		super(event, self).save(*args, **kwargs)
-    
+
 	def form_valid(self, form):
 		event = form.save()
 		request = self.request
@@ -151,8 +153,7 @@ class CreateEvent(CreateView):
 			create_meeting_json = create_meeting_response.json()
 			event.join_zoom_url = create_meeting_json['join_url']
 			event.start_zoom_url = create_meeting_json['start_url']
-		  event.space_open = event.rsvp_capacity
-      
+		print(create_meeting_json)
 		form.save()
 		messages.success(request, _('You have successfully created your event'))
 		return HttpResponseRedirect('/event')
