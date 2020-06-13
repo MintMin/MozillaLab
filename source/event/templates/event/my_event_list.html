@@ -45,7 +45,9 @@
 
                   <div class="card-body">
                       <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
-                      <a href="{% url 'event:un_rsvp' event.id %}" class="btn btn-success"> Unregister </a>
+                      {% if request.user.is_student %}
+                        <a href="{% url 'event:un_rsvp' event.id %}" class="btn btn-success"> Unregister </a>
+                      {% endif %}
                   </div>
 
             </div>

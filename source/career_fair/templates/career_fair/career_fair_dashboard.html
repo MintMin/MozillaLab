@@ -36,7 +36,8 @@
                   </div>
 
                   <div class="card-body">
-                     <a href="{% url 'career_fair:detail' event.id %}" class="btn btn-info"> View Booths</a>
+                      <a href="{% url 'career_fair:detail' event.id %}" class="btn btn-info"> View Booths</a>
+
                   </div>
             </div>
             </div>
@@ -49,7 +50,45 @@
         {% else %}
           <p>There are no event in the library.</p>
         {% endif %}     
-        
+
+
+    <h1>Past Career Fairs</h1>
+
+        {% if past_career_list %}
+             <ul>
+                <div class="container">
+                {% for event in past_career_list %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                        <div class = "row">
+                     {% endif %}
+                        <div class="col-sm">
+
+
+              <div class="card border-info mb-3" style="max-width: 20rem;">
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <!-- <div class="card-header">Header</div> -->
+
+                  <div class="card-body text-dark">
+                      <h5 class="card-title bg-info text-white ">{{event.university}}</h5>
+                      <p class="list-group-item">{{event.firstdate}} to {{event.lastdate}}</p>
+                  </div>
+
+                  <div class="card-body">
+                      <a href="{% url 'career_fair:detail' event.id %}" class="btn btn-info"> View Booths</a>
+
+                  </div>
+            </div>
+            </div>
+                    {% if forloop.counter|divisibleby:3 %}
+              </div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="col-sm"> </div>
+          </ul>
+        {% else %}
+          <p>There are no event in the library.</p>
+        {% endif %}
+
     {% else %}
 
         {% trans 'You are a guest.' %}

@@ -1,15 +1,17 @@
 {% extends 'layouts/default/page.html' %}
-
 {% load i18n %}
+{% load my_extras %}
 
 {% block content %}
     <p>University: {{ event.university }}</p>
     <p>Start Date: {{ event.firstdate }}</p>
     <p>End Date: {{ event.lastdate }}</p>
-    {% if booths %}
+
+    {% if user_booths %}
+    <h1>Your Booths</h1>
              <ul>
                 <div class="container">
-                {% for booth in booths %}
+                {% for booth in user_booths %}
                     {% if forloop.counter0|divisibleby:3 %}
                         <div class = "row">
                      {% endif %}
@@ -31,7 +33,23 @@
                   </div>
 
                   <div class="card-body">
-<!-- Here we would add a button to sign up for a slot-->
+                      <script language="javascript" type="text/javascript">
+                        <!--
+                            function popitup(url) {
+                                newwindow=window.open(url,'{{title}}','height=600,width=450');
+                                if (window.focus) {newwindow.focus()}
+                                return false;
+                            }
+
+                        // -->
+                       </script>
+                            <a href="{% url 'career_fair:booth_detail' event.id booth.company %}" class="btn btn-info" onclick="return popitup('details/{{ booth.company }}')">
+                                {% trans 'View Details' %} </a>
+                            {% if request.user.is_student and zoom_time|get_item:booth %}
+                                <a class="btn btn-success" href= {{booth.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
+                            {% elif request.user.is_recruiter and zoom_time|get_item:booth %}
+                                <a class="btn btn-success" href= {{booth.start_zoom_url}} target="_blank" role="button">Start Meeting</a>
+                            {% endif %}
                   </div>
 
             </div>
@@ -42,7 +60,56 @@
                 {% endfor %}
                     <div class="col-sm"> </div>
           </ul>
-        {% endif %}  
+        {% endif %}
+    {% if other_booths %}
+    <h1>Available Booths</h1>
+             <ul>
+                <div class="container">
+                {% for booth in other_booths %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                        <div class = "row">
+                     {% endif %}
+                        <div class="col-sm">
+
+
+              <div class="card border-info mb-3" style="max-width: 20rem;">
+                <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                <!-- <div class="card-header">Header</div> -->
+
+                  <div class="card-body text-dark">
+                      <h5 class="card-title bg-info text-white ">{{booth.company}}</h5>
+                      <p class="card-text">{{booth.recruiter}}</p>
+
+
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{booth.date}} from {{booth.time_start}} to {{booth.time_end}}</li>
+                      </ul>
+                  </div>
+
+                  <div class="card-body">
+                      <script language="javascript" type="text/javascript">
+                        <!--
+                            function popitup(url) {
+                                newwindow=window.open(url,'{{title}}','height=600,width=450');
+                                if (window.focus) {newwindow.focus()}
+                                return false;
+                            }
+
+                        // -->
+                       </script>
+                            <a href="{% url 'career_fair:booth_detail' event.id booth.company %}" class="btn btn-info" onclick="return popitup('details/{{ booth.company }}')">
+                                {% trans 'View Details' %} </a>
+                  </div>
+
+            </div>
+            </div>
+                    {% if forloop.counter|divisibleby:3 %}
+              </div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="col-sm"> </div>
+          </ul>
+        {% endif %}
     <script>
         function goBack()
         {

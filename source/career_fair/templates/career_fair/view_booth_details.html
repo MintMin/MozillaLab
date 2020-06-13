@@ -1,0 +1,30 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+    <p>Company: {{ booth.company }}</p>
+    <p>Time: {{ booth.date }} from {{ booth.time_start }} to {{ booth.time_end }}</p>
+    <p>Interview Duration: {{ booth.interview_duration }} minutes</p>
+
+        {% for slot in signup_list %}
+            <p>Time Start: {{ slot.key }}
+                {% if request.user.is_student %}
+                    {% if slot == signedup_slot %}
+                        <button class="btn btn-danger" onclick="location.href='{% url 'career_fair:remove' slot.id %}'">Remove!</button>
+                    {% elif slot.value == None %}
+                        {% if signedup_slot %}
+                            <button class="btn btn-warning" onclick="location.href='{% url 'career_fair:change' slot.id %}'">Change!</button>
+                        {% else %}
+                            <button class="btn btn-success" onclick="location.href='{% url 'career_fair:signup' slot.id %}'">Sign Up!</button>
+                        {% endif %}
+                    {% endif %}
+                {% elif request.user.is_recruiter %}
+                    {{ slot.value }}
+                {% endif %}
+            </p>
+        {% endfor %}
+
+{% endblock %}
+

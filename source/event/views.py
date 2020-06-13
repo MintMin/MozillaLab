@@ -153,7 +153,7 @@ class CreateEvent(CreateView):
 			create_meeting_json = create_meeting_response.json()
 			event.join_zoom_url = create_meeting_json['join_url']
 			event.start_zoom_url = create_meeting_json['start_url']
-		print(create_meeting_json)
+		#print(create_meeting_json)
 		form.save()
 		messages.success(request, _('You have successfully created your event'))
 		return HttpResponseRedirect('/event')
