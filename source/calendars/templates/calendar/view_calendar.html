@@ -8,6 +8,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" rel="stylesheet">
+    <!-- <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>  -->
+
 
 {% endblock %} -->
 
@@ -17,8 +19,9 @@
             <li><a href="">My Events</a></li>
             <li><a href="#">All Events</a></li>
           
-            {% for i in event_list %}
-            <p>{{ i.date|date:"Y-m-d"}}
+            {% for i in past_event_list %}
+            <p> 
+                {{ i.date|date:"Y-m-d"}}
             </p>
                        
             {% endfor %}
@@ -47,25 +50,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script> 
 
-    <!-- <script type="text/javascript">
-    $(function () {
-            //initialize FullCalendar
-            $('#calendar').fullCalendar({
-
-            //defaultView: 'agendaWeek',
-            contentHeight: 650,
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            //show weekends
-            weekends: true,
-            });
-        });
-
-    </script> -->
-
+    
     <script>
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -82,39 +67,72 @@
             },
 
             timeZone: "local",
+            nowIndicator: true,
 
+            events: [
+       
+                    {% for i in event_list %}
+                        {
+                            title: '{{ i.title }}',
+                            start: '{{ i.date|date:"Y-m-d" }}',
+                            // end: '{{ i.date|date:"Y-m-d" }}',
+                            // start: '{{ i.date|date:"Y-m-d"  }}'+'{{i.start_time}}',
+                            // end: '{{ i.end_time }}',
+                            // location: "{{ i.event_location }}",
 
-            // eventSources: [
-            //     '/feed1.php',
-            //     '/feed2.php'
+                        },
+                    {% endfor %}
 
-            // ]
-            // });
+                    {% for p in past_event_list %}
+                        {
+                            title: '{{ p.title }}',
+                            start: '{{ p.date|date:"Y-m-d" }}',
+                            // end: '{{ i.date|date:"Y-m-d" }}',
+                            // start: '{{ i.date|date:"Y-m-d"  }}'+'{{i.start_time}}',
+                            // end: '{{ i.end_time }}',
+                            // location: "{{ i.event_location }}",
+                            color: 'purple'
+                        },
+                    {% endfor %}
+
             
+                // {% for i in event_list %}
+                //     {
+                //         title: '{{ i.title }}',
+                //         start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
+                //         end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
+
             
+                //         // description: '{{ i.summary }}',
+                //         // location: "{{ i.event_location }}",
+                //     },
+                // {% endfor %}
+
+                
+            ],
+            
+            // DIRECT TO THE CREATE EVENT PAGE
             // customButtons: {
-            //     AddEventButton: {
+            //     AddEvent: {
             //         text: 'Create An Event',
-            //         click: function(){
-            //             alert('blabla');
+            //         click: function (){
+            //             // window.location.href='{% url 'event:create_event' %}'；
+            //             // <a> href={% url 'event:create_event' %} </a>
             //         }
             //     },
 
             // },
-
-            events: [
-                {% for i in event_list %}
-                    {
-                        title: '{{ i.title }}',
-                        start: '{{ i.date|date:"Y-m-d" }}',
-                        // end: '{{ i.date|date:"Y-m-d" }}',
-                        // start: '{{ i.date|date:"Y-m-d"  }}'+'{{i.start_time}}',
-                        // end: '{{ i.end_time }}',
-                        // location: "{{ i.event_location }}",
-                    },
-                {% endfor %}
-            ],
             
+            // SHOW EVENT SUMMARY
+            // eventRender: function(info) {
+            //     var tooltip = new Tooltip(info.el, {
+            //         title: info.event.extendedProps.description,
+            //         placement: 'top',
+            //         trigger: 'hover',
+            //         container: 'body'
+            //     });
+            // },
+
             
             // events: [
             // {
@@ -131,11 +149,7 @@
             //     title: 'Repeating Event',
             //     start: '2020-06-09T16:00:00'
             // },
-            // {
-            //     groupId: '999',
-            //     title: 'Repeating Event',
-            //     start: '2020-06-16T16:00:00'
-            // },
+           
             // {
             //     title: 'Conference',
             //     start: '2020-06-11',
@@ -149,14 +163,6 @@
             // {
             //     title: 'Lunch',
             //     start: '2020-05-12T12:00:00'
-            // },
-            // {
-            //     title: 'Meeting',
-            //     start: '2020-05-12T14:30:00'
-            // },
-            // {
-            //     title: 'Birthday Party',
-            //     start: '2020-05-13T07:00:00'
             // },
             // {
             //     title: 'Click for Google',
