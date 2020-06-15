@@ -53,6 +53,11 @@ class ViewCalendar(TemplateView):
                 lastdate__gte=datetime.now() - timedelta(days=1))  # last day greater than today     
             context['past_career_list'] = Career_Fair.objects.filter(
                 lastdate__lte=datetime.now() - timedelta(days=1))
+
+            context['booth_list'] = Career_Booth.objects.filter(
+                recruiter = request.user, date__gte=datetime.now() - timedelta(days=1))  
+            context['past_booth_list'] = Career_Booth.objects.filter(
+                recruiter = request.user, date__lte=datetime.now() - timedelta(days=1))
             
         elif(request.user.is_student):
             context['event_list'] = Event.objects.filter(

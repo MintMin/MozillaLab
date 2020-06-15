@@ -35,6 +35,7 @@ class CreateBoothForm(forms.ModelForm):
 		widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')#,
 		#initial = self.user.university
 		)
+	booth_name = forms.CharField(max_length=100)
 	# @property
  #    def booth_check(self):
  #    	request = self.request

@@ -52,6 +52,7 @@ class Career_Booth(models.Model):
 	time_start = models.TimeField(null=True, blank=True)
 	time_end = models.TimeField(null=True, blank=True)
 	university = models.CharField(max_length=100)
+	booth_name = models.CharField(max_length=100)
 	career_fair = models.ForeignKey(Career_Fair, on_delete=models.SET_NULL, null=True, blank=True)
 	# View detail button would display above information as well as other information they want to include
 

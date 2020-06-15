@@ -92,15 +92,17 @@
                         {
                             title: '{{ i.title }}',
                             start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
-                            end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',       // default color: #4c86d2  bootstrap blue:#007BFF
+                            end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
+                            url: "{% url 'event:detail' i.id %}",                                         // default color: #4c86d2  bootstrap blue:#007BFF
                         },
                     {% endfor %}
 
-                    {% for p in past_event_list %}
+                    {% for i in past_event_list %}
                         {
-                            title: '{{ p.title }}',
-                            start: '{{ p.date|date:"Y-m-d" }}'+'T'+'{{ p.start_time|date:"H:i:s"}}',   // ISO8061 format
-                            end: '{{ p.date|date:"Y-m-d" }}'+'T'+'{{ p.end_time|date:"H:i:s"}}',
+                            title: '{{ i.title }}',
+                            start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
+                            end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
+                            url: "{% url 'event:detail' i.id %}",
                             color: '#7698C4',
                         },
                     {% endfor %}
@@ -110,20 +112,42 @@
                             title: '{{ i.university }}'+' Career Fair',
                             start: '{{ i.firstdate|date:"Y-m-d" }}',   // ISO8061 format
                             end: '{{ i.lastdate|date:"Y-m-d" }}',
-                            color: '#FFC108',
+                            url: "{% url 'career_fair:detail' i.id %}",
+                            color: '#FFC108',   
                         },
                     {% endfor %}
 
-                    {% for p in past_career_list %}
+                    {% for i in past_career_list %}
                         {
-                            title: '{{ p.university }}'+' Career Fair',
-                            start: '{{ p.firstdate|date:"Y-m-d" }}',   // ISO8061 format
-                            end: '{{ p.lastdate|date:"Y-m-d" }}'
-                            color: '#F0D477'
+                            title: '{{ i.university }}'+' Career Fair',
+                            start: '{{ i.firstdate|date:"Y-m-d" }}',   // ISO8061 format
+                            end: '{{ i.lastdate|date:"Y-m-d" }}',
+                            url: "{% url 'career_fair:detail' i.id %}",
+                            color: '#F0D477',
+                        
                         },
                     {% endfor %}
 
-                    //  #16A2B8 #6FB0BA
+                    {% for i in booth_list %}
+                        {
+                            title: '{{ i.booth_name }}',
+                            start: '{{ i.date|date:"Y-m-d" }}',   // ISO8061 format
+                            url: "{% url 'career_fair:booth_detail' i.id i.company%}",
+                            color: '#16A2B8 ',
+                        },
+                    {% endfor %}
+
+                    {% for i in past_booth_list %}
+                        {
+                            title: '{{ i.booth_name }}',
+                            start: '{{ i.date|date:"Y-m-d" }}',   // ISO8061 format
+                            url: "{% url 'career_fair:booth_detail' i.id i.company%}",
+                            color: '#6FB0BA',
+                        },
+                    {% endfor %}
+
+
+
 
                 
             ],
@@ -161,31 +185,6 @@
 
             
             // events: [
-            // {
-            //     title: 'All Day Event',
-            //     start: '2020-06-01'
-            // },
-            // {
-            //     title: 'Long Event',
-            //     start: '2020-06-07',
-            //     end: '2020-06-10'
-            // },
-            // {
-            //     groupId: '999',
-            //     title: 'Repeating Event',
-            //     start: '2020-06-09T16:00:00'
-            // },
-           
-            // {
-            //     title: 'Conference',
-            //     start: '2020-06-11',
-            //     end: '2020-06-13'
-            // },
-            // {
-            //     title: 'Meeting',
-            //     start: '2020-05-12T10:30:00',
-            //     end: '2020-05-12T12:30:00'
-            // },
             
             // {
             //     title: 'Click for Google',
