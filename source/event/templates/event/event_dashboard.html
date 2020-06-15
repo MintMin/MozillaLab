@@ -7,12 +7,12 @@
     {% if request.user.is_authenticated %}
 
       <div class="headline">
-        <h1>My Events
+        <h1>My Infosessions
         <button class="btn btn-success" onclick="location.href='{% url 'event:my_event_list' %}'">
             {% if request.user.is_recruiter %}
-                View All of Your Events
+                View All of Your Infosessions
             {% else %}
-                View all of Your RSVP Events
+                View all of Your RSVP Infosessions
             {% endif %}
         </button>
 
@@ -70,14 +70,14 @@
                     <div class="col-sm"> </div>
           </ul>
         {% else %}
-          <p>There are no event in the library.</p>
+          <p>There are no Infosessions in the library.</p>
         {% endif %}     
         
 
       {% if request.user.is_student %}
           <div class="headline">
-            <h1>Event Dashboard
-            <button class="btn btn-warning" onclick="location.href='{% url 'event:event_list' %}'">View All Events</button> 
+            <h1>Infosession Dashboard
+            <button class="btn btn-warning" onclick="location.href='{% url 'event:event_list' %}'">View All Infosessions</button> 
             </h1> 
           </div>
 
@@ -143,9 +143,9 @@
       {% endif %}
 
      <div class="headline">
-        <h1>My Past Events
+        <h1>My Past Infosessions
         <button class="btn btn-success" onclick="location.href='{% url 'event:past_event' %}'">
-            View all Past Events
+            View all Past Infosessions
         </button>
 
         </h1>
@@ -195,7 +195,7 @@
                     <div class="col-sm"> </div>
           </ul>
         {% else %}
-          <p>There are no event in the library.</p>
+          <p>There are no Infosessions in the library.</p>
         {% endif %}
 
     {% else %}

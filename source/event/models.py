@@ -31,19 +31,6 @@ class Event(models.Model):
     rsvp_capacity = models.IntegerField(default=0)
     space_open = models.IntegerField(default=-1)
 
-    EVENT_TYPE_CHOICES = (
-        ('i','Infosession'),
-        ('b','Interview Only'),
-        # ('r', 'Reserved'), 
-    )
-
-    Event_type = models.CharField(
-        max_length=1,
-        choices=EVENT_TYPE_CHOICES,
-        blank=False,
-        default='i',
-        help_text='Select a type for the event',
-    )
 
     def __str__(self):
         """String for representing the Model object."""

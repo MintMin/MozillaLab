@@ -62,7 +62,11 @@
           </ul>
         {% endif %}
     {% if other_booths %}
+    {% if request.user.is_student %}
     <h1>Available Booths</h1>
+    {% elif request.user.is_recruiter %}
+    <h1>Other Booths</h1>
+    {% endif %}
              <ul>
                 <div class="container">
                 {% for booth in other_booths %}
@@ -87,6 +91,7 @@
                   </div>
 
                   <div class="card-body">
+                    {% if request.user.is_student %}
                       <script language="javascript" type="text/javascript">
                         <!--
                             function popitup(url) {
@@ -99,6 +104,7 @@
                        </script>
                             <a href="{% url 'career_fair:booth_detail' event.id booth.company %}" class="btn btn-info" onclick="return popitup('details/{{ booth.company }}')">
                                 {% trans 'View Details' %} </a>
+                    {% endif %}
                   </div>
 
             </div>

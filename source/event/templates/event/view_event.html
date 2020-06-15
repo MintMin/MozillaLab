@@ -10,7 +10,7 @@
     <p>Time: From {{ event.start_time }} to {{ event.end_time }}</p>
 
     {% if event in past_event_list %}
-        {% trans 'This event has already occurred.' %}
+        {% trans 'This Infosession has already occurred.' %}
     {% else %}
         {% if request.user.is_student %}
             {% if rsvp_bool %}

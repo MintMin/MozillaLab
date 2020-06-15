@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Career_Fair, Career_Booth, Dictionary_Booth, KeyVal
+from event.models import Event
 from accounts.models import Student, Recruiter
 from django.views.generic import TemplateView, CreateView
 from .forms import uni_list, CreateBoothForm
@@ -13,6 +14,94 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from django.forms import ValidationError
 from zoomus import ZoomClient
 from datetime import timedelta
+
+def available(request, slot_id):
+	new_slot = KeyVal.objects.filter(pk = slot_id)[0]
+	user = request.user
+	date = new_slot.container.career_booth.date
+	# First check conflicts with career fair
+	current_slots = KeyVal.objects.filter(value = user)
+	for keyval in current_slots:
+		if(keyval.container.career_booth.date == date):
+			# Check the time
+			time_to_add = datetime.datetime.strptime(new_slot.key, '%H:%M')
+			start_seconds_to_add = time_to_add.hour * 3600 + time_to_add.minute * 60
+			duration_to_add = (1 + new_slot.container.career_booth.interview_duration) * 60
+			total_add = start_seconds_to_add + duration_to_add
+			time_pot_conflict = datetime.datetime.strptime(keyval.key, '%H:%M')
+			start_seconds_pot_conflict = time_pot_conflict.hour * 3600 + time_pot_conflict.minute * 60
+			duration_pot_conflict = (1 + keyval.container.career_booth.interview_duration) * 60
+			total_conflict = start_seconds_pot_conflict + duration_pot_conflict
+			# First case is if our new event starts during the potential conflicted event
+			# Second case is if our new event ends during the potential conflicted event
+			if((start_seconds_to_add >= start_seconds_pot_conflict and 
+				start_seconds_to_add <= total_conflict) or
+				(total_add >= start_seconds_pot_conflict and total_add <= total_conflict)):
+				return False
+	# Next, check conflicts with infosessions
+	current_infosessions = Event.objects.filter(rsvp_list__in = [user])
+	for infosession in current_infosessions:
+		# Check the time
+		new_start = datetime.datetime.strptime(new_slot.key, '%H:%M')
+		new_start_seconds = new_start.hour * 3600 + new_start.minute * 60
+		duration_to_add = (1 + new_slot.container.career_booth.interview_duration) * 60
+		new_end_seconds = new_start_seconds + duration_to_add
+
+		old_start_seconds = infosession.start_time.hour * 3600 + infosession.start_time.minute * 60
+		old_end_seconds = infosession.end_time.hour * 3600 + infosession.end_time.minute * 60
+		# First case is if our new event starts during the potential conflicted event
+		# Second case is if our new event ends during the potential conflicted event
+		if((new_start_seconds >= old_start_seconds and 
+			new_start_seconds <= old_end_seconds) or
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			return False
+	return True
+
+def recruiter_available(request, booth):
+	new_booth = booth
+	recruiter = request.user
+	date = new_booth.date
+	new_start_time = new_booth.time_start
+	new_end_time = new_booth.time_end
+	# First check conflicts with booths
+	current_booths = Career_Booth.objects.filter(recruiter = recruiter, date = date)
+	for booth in current_booths:
+		# Check the time
+		# new_start = datetime.datetime.strptime(new_start_time, '%H:%M')
+		new_start_seconds = new_start_time.hour * 3600 + new_start_time.minute * 60
+		# new_end = datetime.datetime.strptime(new_end_time, '%H:%M')
+		new_end_seconds = new_end_time.hour * 3600 + new_end_time.minute * 60
+
+		# old_start = datetime.datetime.strptime(booth.time_start, '%H:%M')
+		old_start_seconds = booth.time_start.hour * 3600 + booth.time_start.minute * 60
+		# old_end = datetime.datetime.strptime(booth.time_end, '%H:%M')
+		old_end_seconds = booth.time_end.hour * 3600 + booth.time_end.minute * 60
+		# First case is if our new event starts during the potential conflicted event
+		# Second case is if our new event ends during the potential conflicted event
+		if((new_start_seconds >= old_start_seconds and 
+			new_start_seconds <= old_end_seconds) or
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			return False
+	# Next, check conflicts with infosessions
+	current_infosessions = Event.objects.filter(main_recruiter = recruiter, date = date)
+	for infosession in current_infosessions:
+		# Check the time
+		# new_start = datetime.datetime.strptime(new_start_time, '%H:%M')
+		new_start_seconds = new_start_time.hour * 3600 + new_start_time.minute * 60
+		# new_end = datetime.datetime.strptime(new_end_time, '%H:%M')
+		new_end_seconds = new_end_time.hour * 3600 + new_end_time.minute * 60
+
+		# old_start = datetime.datetime.strptime(booth.time_start, '%H:%M')
+		old_start_seconds = infosession.start_time.hour * 3600 + infosession.start_time.minute * 60
+		# old_end = datetime.datetime.strptime(booth.time_end, '%H:%M')
+		old_end_seconds = infosession.end_time.hour * 3600 + infosession.end_time.minute * 60
+		# First case is if our new event starts during the potential conflicted event
+		# Second case is if our new event ends during the potential conflicted event
+		if((new_start_seconds >= old_start_seconds and 
+			new_start_seconds <= old_end_seconds) or
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			return False
+	return True
 
 class AutocompleteUni(autocomplete.Select2ListView):
     def get_list(self):
@@ -32,7 +121,9 @@ def signup(request, slot_id):
 		if time.value == user:
 			messages.error(request, ("Sorry! You've already signed up for this booth."))
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
+	if not available(request, slot_id):
+		messages.error(request, ("Sorry! It looks like you have a scheduling conflict with another booth. Please note that there must be at least a minute buffer between interviews."))
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	slot.value = user
 	slot.save()
 	messages.success(request, ('You have successfully signed up for this time slot!'))
@@ -46,6 +137,10 @@ def change(request, slot_id):
 
 	if slot.value != None:
 		messages.error(request, ("Sorry! Someone already signed up for this slot."))
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+	if not available(request, slot_id):
+		messages.error(request, ("Sorry! It looks like you have a scheduling conflict with another booth. Please note that there must be at least a minute buffer between interviews."))
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 	for time in signup_dictionary:
@@ -99,6 +194,10 @@ class CreateBooth(CreateView):
 		request = self.request
 		booth.recruiter = request.user
 		recruiter = Recruiter.objects.filter(user = request.user)[0]
+		# Check for scheduling conflicts
+		if not recruiter_available(request, booth):
+			messages.error(request, ('You have a scheduling conflict with another event that you have created previously.'))
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		# Check for career fairs, if none exist, create one
 		week_number = booth.date.strftime("%V")
 		year = booth.date.year
