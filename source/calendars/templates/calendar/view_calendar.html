@@ -16,14 +16,30 @@
 {% block content %}
     <section class="content-header margin-bottom">
         <ol class="breadcrumb">
-            
-            <li><a href="{% url 'event:event_list' %}">All Events / </a></li>
-            {% if request.user.is_recruiter %}
-            <li><a href="{% url 'event:event_list' %}">/ Create Event</a></li>
-            {% endif %}
-            
             <p> 
-            </p>     
+                {{request.user.company}}
+                
+                
+                Event Categories: &nbsp;&nbsp;
+            </p>
+            <div style="float:left">
+                <button type="button" class="btn btn-secondary btn-sm">Past Event</button>
+                <button type="button" class="btn btn-primary btn-sm">Info-session</button>
+                {% if request.user.is_recruiter %}
+                <button type="button" class="btn btn-info btn-sm">Career Booths</button>
+                {% elif request.user.is_student %}
+                <button type="button" class="btn btn-info btn-sm">Interviews</button>
+                {% endif %}
+                <button type="button" class="btn btn-warning btn-sm">Career fair</button>
+            </div>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {% if request.user.is_recruiter %}
+            <div style="float:right" >
+                <button type="button" onclick="location.href='{% url 'event:create_event' %}'" class="btn btn-outline-success">Create Event</button>
+            </div>
+            {% endif %}
+
         </ol>
   
 
@@ -70,17 +86,13 @@
             timeZone: "local",
             nowIndicator: true,
 
+            eventTextColor: 'white',
             events: [
-       
                     {% for i in event_list %}
                         {
                             title: '{{ i.title }}',
                             start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
-                            end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
-                            // start: '{{ i.date|date:"Y-m-d"}}'+'T'+'
-                            // end: '{{ i.end_time }}',
-                            // location: "{{ i.event_location }}",
-
+                            end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',       // default color: #4c86d2  bootstrap blue:#007BFF
                         },
                     {% endfor %}
 
@@ -89,10 +101,29 @@
                             title: '{{ p.title }}',
                             start: '{{ p.date|date:"Y-m-d" }}'+'T'+'{{ p.start_time|date:"H:i:s"}}',   // ISO8061 format
                             end: '{{ p.date|date:"Y-m-d" }}'+'T'+'{{ p.end_time|date:"H:i:s"}}',
-                            // location: "{{ i.event_location }}",
-                            color: 'purple'
+                            color: '#7698C4',
                         },
                     {% endfor %}
+
+                    {% for i in career_list %}
+                        {
+                            title: '{{ i.university }}'+' Career Fair',
+                            start: '{{ i.firstdate|date:"Y-m-d" }}',   // ISO8061 format
+                            end: '{{ i.lastdate|date:"Y-m-d" }}',
+                            color: '#FFC108',
+                        },
+                    {% endfor %}
+
+                    {% for p in past_career_list %}
+                        {
+                            title: '{{ p.university }}'+' Career Fair',
+                            start: '{{ p.firstdate|date:"Y-m-d" }}',   // ISO8061 format
+                            end: '{{ p.lastdate|date:"Y-m-d" }}'
+                            color: '#F0D477'
+                        },
+                    {% endfor %}
+
+                    //  #16A2B8 #6FB0BA
 
                 
             ],
@@ -172,4 +203,5 @@
     </script>
 
 {% endblock %}
+
 

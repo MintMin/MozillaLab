@@ -23,8 +23,9 @@ from django.views.generic import TemplateView
 # from django.shortcuts import get_object_or_404, get_list_or_404
 
 from event.models import Event
-from accounts.models import Recruiter
-# from career_fair.models import Career_Fair, Career_Booth
+from accounts.models import Student, Recruiter
+from career_fair.models import Career_Fair, Career_Booth, Dictionary_Booth, KeyVal
+
 from event.forms import CreateEventForm
 from django.http import HttpResponseRedirect
 
@@ -43,15 +44,27 @@ class ViewCalendar(TemplateView):
 
         if(request.user.is_recruiter):
             context['event_list'] = Event.objects.filter(
-            	main_recruiter = request.user, date__gte = datetime.now()-timedelta(days=1))
+                main_recruiter = request.user, date__gte = datetime.now()-timedelta(days=1))
             context['past_event_list'] = Event.objects.filter(
-            	main_recruiter = request.user, date__lte = datetime.now()-timedelta(days=1))
+                main_recruiter = request.user, date__lte = datetime.now()-timedelta(days=1))
 
-        if(request.user.is_student):
+            recruiter = Recruiter.objects.filter(user = request.user)[0]
+            context['career_list'] = Career_Fair.objects.filter(
+                lastdate__gte=datetime.now() - timedelta(days=1))  # last day greater than today     
+            context['past_career_list'] = Career_Fair.objects.filter(
+                lastdate__lte=datetime.now() - timedelta(days=1))
+            
+        elif(request.user.is_student):
             context['event_list'] = Event.objects.filter(
-            	rsvp_list__in = [request.user],date__gte = datetime.now()-timedelta(days=1))
+                rsvp_list__in = [request.user],date__gte = datetime.now()-timedelta(days=1))
             context['past_event_list'] = Event.objects.filter(
-            	rsvp_list__in = [request.user],date__lte = datetime.now()-timedelta(days=1))
+                rsvp_list__in = [request.user],date__lte = datetime.now()-timedelta(days=1))
+            
+            student = Student.objects.filter(user = request.user)[0]
+            context['career_list'] = Career_Fair.objects.filter(
+                university = student.university, lastdate__gte=datetime.now() - timedelta(days=1)) # last day greater than today
+            context['past_career_list'] = Career_Fair.objects.filter(
+                university = student.university, lastdate__lte=datetime.now() - timedelta(days=1))
     
         return context
 
@@ -144,6 +157,7 @@ class ViewCalendar(TemplateView):
 #           ).order_by('firstdate')
 #           # context['joined_fairs'] = Career_Fair.objects.filter()
 #       return context
+
 
 
 
