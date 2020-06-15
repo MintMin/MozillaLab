@@ -16,17 +16,18 @@
 {% block content %}
     <section class="content-header margin-bottom">
         <ol class="breadcrumb">
-            <li><a href="">My Events</a></li>
-            <li><a href="#">All Events</a></li>
-          
-            {% for i in past_event_list %}
+            
+            <li><a href="{% url 'event:event_list' %}">All Events / </a></li>
+            {% if request.user.is_recruiter %}
+            <li><a href="{% url 'event:event_list' %}">/ Create Event</a></li>
+            {% endif %}
+            
             <p> 
-                {{ i.date|date:"Y-m-d"}}
-            </p>
-                       
-            {% endfor %}
-
+            </p>     
         </ol>
+  
+
+
     </section>
     <!-- Main content -->
     <section class="content">
@@ -74,9 +75,9 @@
                     {% for i in event_list %}
                         {
                             title: '{{ i.title }}',
-                            start: '{{ i.date|date:"Y-m-d" }}',
-                            // end: '{{ i.date|date:"Y-m-d" }}',
-                            // start: '{{ i.date|date:"Y-m-d"  }}'+'{{i.start_time}}',
+                            start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
+                            end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
+                            // start: '{{ i.date|date:"Y-m-d"}}'+'T'+'
                             // end: '{{ i.end_time }}',
                             // location: "{{ i.event_location }}",
 
@@ -86,43 +87,37 @@
                     {% for p in past_event_list %}
                         {
                             title: '{{ p.title }}',
-                            start: '{{ p.date|date:"Y-m-d" }}',
-                            // end: '{{ i.date|date:"Y-m-d" }}',
-                            // start: '{{ i.date|date:"Y-m-d"  }}'+'{{i.start_time}}',
-                            // end: '{{ i.end_time }}',
+                            start: '{{ p.date|date:"Y-m-d" }}'+'T'+'{{ p.start_time|date:"H:i:s"}}',   // ISO8061 format
+                            end: '{{ p.date|date:"Y-m-d" }}'+'T'+'{{ p.end_time|date:"H:i:s"}}',
                             // location: "{{ i.event_location }}",
                             color: 'purple'
                         },
                     {% endfor %}
 
-            
-                // {% for i in event_list %}
-                //     {
-                //         title: '{{ i.title }}',
-                //         start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
-                //         end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
-
-            
-                //         // description: '{{ i.summary }}',
-                //         // location: "{{ i.event_location }}",
-                //     },
-                // {% endfor %}
-
                 
             ],
             
-            // DIRECT TO THE CREATE EVENT PAGE
+            // {% if request.user.is_recruiter %}
             // customButtons: {
             //     AddEvent: {
             //         text: 'Create An Event',
             //         click: function (){
-            //             // window.location.href='{% url 'event:create_event' %}'；
-            //             // <a> href={% url 'event:create_event' %} </a>
+            //             // location.href="{% url 'event:create_event' %}"；
+            //             alert('RUN!')
             //         }
             //     },
 
             // },
-            
+            // {% endif %}
+            customButtons: {
+                custom1: {
+                    text: 'custom 1',
+                    click: function() {
+                    // alert('clicked custom button 1!');
+                    }
+                },
+            }
+
             // SHOW EVENT SUMMARY
             // eventRender: function(info) {
             //     var tooltip = new Tooltip(info.el, {
@@ -160,10 +155,7 @@
             //     start: '2020-05-12T10:30:00',
             //     end: '2020-05-12T12:30:00'
             // },
-            // {
-            //     title: 'Lunch',
-            //     start: '2020-05-12T12:00:00'
-            // },
+            
             // {
             //     title: 'Click for Google',
             //     url: 'http://google.com/',
@@ -180,3 +172,4 @@
     </script>
 
 {% endblock %}
+

@@ -47,13 +47,12 @@ class ViewCalendar(TemplateView):
             context['past_event_list'] = Event.objects.filter(
             	main_recruiter = request.user, date__lte = datetime.now()-timedelta(days=1))
 
-
-        elif(request.user.is_student):
+        if(request.user.is_student):
             context['event_list'] = Event.objects.filter(
-            	rsvp_list__in = request.user,date__gte = datetime.now()-timedelta(days=1))
+            	rsvp_list__in = [request.user],date__gte = datetime.now()-timedelta(days=1))
             context['past_event_list'] = Event.objects.filter(
-            	rsvp_list__in = request.user,date__lte = datetime.now()-timedelta(days=1))
-
+            	rsvp_list__in = [request.user],date__lte = datetime.now()-timedelta(days=1))
+    
         return context
 
     # def get_time(self, **kwargs):
