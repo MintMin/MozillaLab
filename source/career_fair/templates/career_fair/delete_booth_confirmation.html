@@ -1,0 +1,20 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1> Are you sure you want to delete your career booth? </h1>
+<p> 
+    <button class="btn btn-success" onclick="location.href='{% url 'career_fair:delete_booth' booth_id %}'">Yes</button>
+   <script>
+        function goBack()
+        {
+            window.history.back()
+        }
+    </script>
+    <input class="btn btn-primary" type="button" value="No" onclick="goBack()">
+</p>
+
+{% endblock %}
+
