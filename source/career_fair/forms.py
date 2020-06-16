@@ -19,17 +19,23 @@ def uni_list():
 class CreateBoothForm(forms.ModelForm):
 	class Meta:
 		model = Career_Booth
-		fields = ('interview_duration', 'rest_duration','date', 'time_start', 'time_end', 'university')
+		fields = ('interview_duration', 'rest_duration','date', 'time_start', 'time_end', 'university','booth_name')
 	years_to_display = range(datetime.datetime.now().year,
 	datetime.datetime.now().year + 2)
-	date = forms.DateField(widget=SelectDateWidget(years=years_to_display), required = True)
+	date = forms.DateField(
+		widget=SelectDateWidget(years=years_to_display), 
+		required = True,
+		initial = datetime.datetime.now(),
+		)
 	time_start = forms.TimeField(
 		widget=SelectTimeWidget(),
-		required = True
+		required = True,
+		initial = datetime.time(9,00),
 		)
 	time_end = forms.TimeField(
 		widget=SelectTimeWidget(),
-		required = True
+		required = True,
+		initial = datetime.time(12,00),
 		)
 	university = autocomplete.Select2ListCreateChoiceField(
 		choice_list=uni_list(),
@@ -37,7 +43,15 @@ class CreateBoothForm(forms.ModelForm):
 		widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')
 		#initial = self.user.university
 		)
-	# booth_name = forms.CharField(max_length=100)
+	booth_name = forms.CharField(
+		required=False,label='Booth Name',
+		max_length=100,
+		help_text='Optional. The name is only used on your calendar.'
+		)
+
+
+
+
 	# @property
  #    def booth_check(self):
  #    	request = self.request
