@@ -22,20 +22,22 @@ class CreateBoothForm(forms.ModelForm):
 		fields = ('interview_duration', 'rest_duration','date', 'time_start', 'time_end', 'university')
 	years_to_display = range(datetime.datetime.now().year,
 	datetime.datetime.now().year + 2)
-	date = forms.DateField(widget=SelectDateWidget(years=years_to_display))
+	date = forms.DateField(widget=SelectDateWidget(years=years_to_display), required = True)
 	time_start = forms.TimeField(
-		widget=SelectTimeWidget()
+		widget=SelectTimeWidget(),
+		required = True
 		)
 	time_end = forms.TimeField(
-		widget=SelectTimeWidget()
+		widget=SelectTimeWidget(),
+		required = True
 		)
 	university = autocomplete.Select2ListCreateChoiceField(
 		choice_list=uni_list(),
-		required=False,
-		widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')#,
+		required=True,
+		widget=autocomplete.ListSelect2(url='accounts:uni-autocomplete')
 		#initial = self.user.university
 		)
-	booth_name = forms.CharField(max_length=100)
+	# booth_name = forms.CharField(max_length=100)
 	# @property
  #    def booth_check(self):
  #    	request = self.request

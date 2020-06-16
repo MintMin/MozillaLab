@@ -1,7 +1,7 @@
 {% extends 'layouts/default/page.html' %}
 
 {% load i18n %}
-
+{% load my_extras %}
 {% block content %}
 
     {% if request.user.is_authenticated %}
@@ -45,8 +45,13 @@
 
                   <div class="card-body">
                       <a href="{% url 'event:detail' event.id %}" class="btn btn-info"> See Details</a> {{event.company}}
-                      {% if request.user.is_student %}
+                      {% if request.user.is_student and not zoom_time|get_item:event %}
                         <a href="{% url 'event:un_rsvp' event.id %}" class="btn btn-success"> Unregister </a>
+                      {% endif %}
+                      {% if request.user.is_student and zoom_time|get_item:event %}
+                          <a class="btn btn-success" href= {{event.join_zoom_url}} target="_blank" role="button">Join Meeting</a>
+                      {% elif request.user.is_recruiter and zoom_time|get_item:event %}
+                          <a class="btn btn-success" href= {{event.start_zoom_url}} target="_blank" role="button">Start Meeting</a>
                       {% endif %}
                   </div>
 

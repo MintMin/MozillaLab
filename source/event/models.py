@@ -22,7 +22,7 @@ class Event(models.Model):
     
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
-    
+     
     # typE = models.ManyToManyField(Type, help_text='Select a type for the event')
     absolute_url = models.CharField(max_length=400, blank=True, editable=False)
 

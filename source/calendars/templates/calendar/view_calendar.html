@@ -36,7 +36,8 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {% if request.user.is_recruiter %}
             <div style="float:right" >
-                <button type="button" onclick="location.href='{% url 'event:create_event' %}'" class="btn btn-outline-success">Create Event</button>
+                <button type="button" onclick="location.href='{% url 'event:create_event' %}'" class="btn btn-outline-success">Create Infosession</button>
+                <button type="button" onclick="location.href='{% url 'career_fair:create-booth' %}'" class="btn btn-outline-success">Create Career Booth</button>
             </div>
             {% endif %}
 

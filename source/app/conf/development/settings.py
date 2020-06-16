@@ -374,7 +374,7 @@ LANGUAGES = [
     ('zh-Hans', _('Simplified Chinese')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Pacific'
 USE_TZ = True
 
 STATIC_ROOT = os.path.join(CONTENT_DIR, 'static')

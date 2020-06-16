@@ -10,7 +10,9 @@ from .views import (
     booth_detail,
     signup,
     remove,
-    change
+    change,
+    DeleteBoothConfirmation,
+    DeleteBooth
 )
 
 app_name = "career_fair"
@@ -26,4 +28,6 @@ urlpatterns = [
     url(r'^signup/(?P<slot_id>[0-9]+)/$', signup, name='signup'),
     url(r'^remove/(?P<slot_id>[0-9]+)/$', remove, name='remove'),
     url(r'^change/(?P<slot_id>[0-9]+)/$', change, name='change'),
+    url(r'^delete_booth_confirmation/(?P<booth_id>[0-9]+)/$', DeleteBoothConfirmation.as_view(), name = 'delete_booth_confirmation'),
+    url(r'^delete_booth/(?P<booth_id>\d+)/$', DeleteBooth, name='delete_booth')
 ]

@@ -443,10 +443,11 @@ class RecruiterProfileView(View):
         #     # instance.student = request.user
         #     # instance.save()
         #     pass
-
-        form = self.form_class(data = request.POST, instance=request.user)
+        recruiter = get_object_or_404(Recruiter, user_id = self.request.user)
+        form = self.form_class(data = request.POST, instance=recruiter)
         if form.is_valid():
             # <process form cleaned data>
+
             form.save()
             # instance.student = request.user
             # instance.save()
@@ -467,7 +468,7 @@ class StudentProfileView(View):
                 'university': student.university,
                 'major': student.major,
                 'grad_date': student.grad_date,
-                'career_list': student.career_interest}
+                'career_interest': student.career_interest}
         form = self.form_class(initial=data)
         return render(request, self.template_name, {'form': form})
 
@@ -479,10 +480,11 @@ class StudentProfileView(View):
         #     # instance.student = request.user
         #     # instance.save()
         #     pass
-
-        form = self.form_class(data = request.POST, instance=request.user)
+        student = get_object_or_404(Student, user_id = self.request.user)
+        form = self.form_class(data = request.POST, instance=student)
         if form.is_valid():
-            # <process form cleaned data>
+            # <process form cleaned data
+            student.career_interest = form.cleaned_data['career_interest']
             form.save()
             # instance.student = request.user
             # instance.save()

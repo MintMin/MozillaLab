@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from django.forms import ValidationError
 from zoomus import ZoomClient
 from datetime import timedelta
+from django.utils import timezone
 
 def available(request, slot_id):
 	new_slot = KeyVal.objects.filter(pk = slot_id)[0]
@@ -21,7 +22,9 @@ def available(request, slot_id):
 	date = new_slot.container.career_booth.date
 	# First check conflicts with career fair
 	current_slots = KeyVal.objects.filter(value = user)
+	print(current_slots)
 	for keyval in current_slots:
+		print(keyval.container)
 		if(keyval.container.career_booth.date == date):
 			# Check the time
 			time_to_add = datetime.datetime.strptime(new_slot.key, '%H:%M')
@@ -39,7 +42,7 @@ def available(request, slot_id):
 				(total_add >= start_seconds_pot_conflict and total_add <= total_conflict)):
 				return False
 	# Next, check conflicts with infosessions
-	current_infosessions = Event.objects.filter(rsvp_list__in = [user])
+	current_infosessions = Event.objects.filter(rsvp_list__in = [user], date = date)
 	for infosession in current_infosessions:
 		# Check the time
 		new_start = datetime.datetime.strptime(new_slot.key, '%H:%M')
@@ -215,7 +218,8 @@ class CreateBooth(CreateView):
 				return HttpResponseRedirect('/career_fair/error')
 
 		booth.career_fair = fair
-
+		# Set up booth_name
+		booth.booth_name = booth.company + " Infosession"
 		""" code below will create dictionary for signup """
 
 		dictionary = Dictionary_Booth.objects.create(
@@ -263,7 +267,7 @@ def detail(request, event_id):
 				user_booths.append(booth)
 				student_time = datetime.datetime.strptime(student[0].key, '%H:%M')
 				student_seconds = student_time.hour * 3600 + student_time.minute * 60
-				now = datetime.datetime.now().time()
+				now = timezone.make_aware(datetime.datetime.now(),timezone.get_default_timezone())
 				now_seconds = now.hour * 3600 + now.minute * 60
 				booth_seconds = booth.interview_duration * 60
 				if booth.date == datetime.date.today():
@@ -344,3 +348,15 @@ class CareerFairDashboard(TemplateView):
 			).order_by('firstdate')
 			# context['joined_fairs'] = Career_Fair.objects.filter()
 		return context
+
+class DeleteBoothConfirmation(TemplateView):
+	template_name = 'career_fair/delete_booth_confirmation.html'
+
+def DeleteBooth(request, booth_id):
+	booth = get_object_or_404(Career_Booth, pk=booth_id)
+	career_fair = get_object_or_404(Career_Fair, pk = booth.career_fair.id)
+	booth.delete()
+	if(len(Career_Booth.objects.filter(career_fair = booth.career_fair)) == 0):
+		career_fair.delete()
+	messages.success(request, ('Your booth has been successfully deleted.'))
+	return HttpResponseRedirect('/career_fair')

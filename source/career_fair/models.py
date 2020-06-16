@@ -52,7 +52,7 @@ class Career_Booth(models.Model):
 	time_start = models.TimeField(null=True, blank=True)
 	time_end = models.TimeField(null=True, blank=True)
 	university = models.CharField(max_length=100)
-	booth_name = models.CharField(max_length=100)
+	booth_name = models.CharField(max_length=200)
 	career_fair = models.ForeignKey(Career_Fair, on_delete=models.SET_NULL, null=True, blank=True)
 	# View detail button would display above information as well as other information they want to include
 
@@ -60,7 +60,7 @@ class Dictionary_Booth(models.Model):
     career_booth = models.OneToOneField(Career_Booth, on_delete=models.CASCADE, null=True, blank=True)
 
 class KeyVal(models.Model):
-	container = models.ForeignKey(Dictionary_Booth, db_index=True, on_delete=models.SET_NULL, null=True)
+	container = models.ForeignKey(Dictionary_Booth, db_index=True, on_delete=models.CASCADE, null=True)
 	key       = models.CharField(max_length=240, db_index=True)
 	#value     = models.OneToOneField(CustomUser, db_index=True, on_delete=models.SET_NULL, null=True)
 	value = models.ForeignKey(CustomUser, db_index=True, on_delete=models.SET_NULL, null=True)

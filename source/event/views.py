@@ -22,14 +22,102 @@ from django.conf import settings
 from django.views.generic import TemplateView, CreateView
 from .models import Event
 from accounts.models import Recruiter
+from career_fair.models import KeyVal, Career_Booth
 from .forms import CreateEventForm
 import json
 from zoomus import ZoomClient
 from django.utils.dateparse import parse_datetime
 from django.http import HttpResponseRedirect
 from datetime import datetime, timedelta
-from dateutil import tz
+from django.utils import timezone
 
+def student_available(request, event_id):
+	new_infosession = Event.objects.filter(pk = event_id)[0]
+	user = request.user
+	date = new_infosession.date
+	# First check conflicts with career fair
+	current_slots = KeyVal.objects.filter(value = user)
+	for keyval in current_slots:
+		if(keyval.container.career_booth.date == date):
+			# Check the time
+			new_start_seconds = new_infosession.start_time.hour * 3600 + new_infosession.start_time.minute * 60
+			# new_end = datetime.datetime.strptime(new_end_time, '%H:%M')
+			new_end_seconds = new_infosession.end_time.hour * 3600 + new_infosession.end_time.minute * 60
+
+			time_pot_conflict = datetime.strptime(keyval.key, '%H:%M')
+			start_seconds_pot_conflict = time_pot_conflict.hour * 3600 + time_pot_conflict.minute * 60
+			duration_pot_conflict = (1 + keyval.container.career_booth.interview_duration) * 60
+			total_conflict = start_seconds_pot_conflict + duration_pot_conflict
+			# First case is if our new event starts during the potential conflicted event
+			# Second case is if our new event ends during the potential conflicted event
+			if((new_start_seconds >= start_seconds_pot_conflict and 
+				new_start_seconds <= total_conflict) or
+				(new_end_seconds >= start_seconds_pot_conflict and new_end_seconds <= total_conflict)):
+				return False
+	# Next, check conflicts with infosessions
+	current_infosessions = Event.objects.filter(rsvp_list__in = [user], date = date)
+	for infosession in current_infosessions:
+		# Check the time
+		new_start_seconds = new_infosession.start_time.hour * 3600 + new_infosession.start_time.minute * 60
+		# new_end = datetime.datetime.strptime(new_end_time, '%H:%M')
+		new_end_seconds = new_infosession.end_time.hour * 3600 + new_infosession.end_time.minute * 60
+
+
+		old_start_seconds = infosession.start_time.hour * 3600 + infosession.start_time.minute * 60
+		old_end_seconds = infosession.end_time.hour * 3600 + infosession.end_time.minute * 60
+		# First case is if our new event starts during the potential conflicted event
+		# Second case is if our new event ends during the potential conflicted event
+		if((new_start_seconds >= old_start_seconds and 
+			new_start_seconds <= old_end_seconds) or
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			return False
+	return True
+
+def recruiter_available(request, infosession):
+	new_infosession = infosession
+	recruiter = request.user
+	date = new_infosession.date
+	new_start_time = new_infosession.start_time
+	new_end_time = new_infosession.end_time
+	# First check conflicts with booths
+	current_booths = Career_Booth.objects.filter(recruiter = recruiter, date = date)
+	for booth in current_booths:
+		# Check the time
+		# new_start = datetime.datetime.strptime(new_start_time, '%H:%M')
+		new_start_seconds = new_start_time.hour * 3600 + new_start_time.minute * 60
+		# new_end = datetime.datetime.strptime(new_end_time, '%H:%M')
+		new_end_seconds = new_end_time.hour * 3600 + new_end_time.minute * 60
+
+		# old_start = datetime.datetime.strptime(booth.time_start, '%H:%M')
+		old_start_seconds = booth.time_start.hour * 3600 + booth.time_start.minute * 60
+		# old_end = datetime.datetime.strptime(booth.time_end, '%H:%M')
+		old_end_seconds = booth.time_end.hour * 3600 + booth.time_end.minute * 60
+		# First case is if our new event starts during the potential conflicted event
+		# Second case is if our new event ends during the potential conflicted event
+		if((new_start_seconds >= old_start_seconds and 
+			new_start_seconds <= old_end_seconds) or
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			return False
+	# Next, check conflicts with infosessions
+	current_infosessions = Event.objects.filter(main_recruiter = recruiter, date = date)
+	for infosession in current_infosessions:
+		# Check the time
+		# new_start = datetime.datetime.strptime(new_start_time, '%H:%M')
+		new_start_seconds = new_start_time.hour * 3600 + new_start_time.minute * 60
+		# new_end = datetime.datetime.strptime(new_end_time, '%H:%M')
+		new_end_seconds = new_end_time.hour * 3600 + new_end_time.minute * 60
+
+		# old_start = datetime.datetime.strptime(booth.time_start, '%H:%M')
+		old_start_seconds = infosession.start_time.hour * 3600 + infosession.start_time.minute * 60
+		# old_end = datetime.datetime.strptime(booth.time_end, '%H:%M')
+		old_end_seconds = infosession.end_time.hour * 3600 + infosession.end_time.minute * 60
+		# First case is if our new event starts during the potential conflicted event
+		# Second case is if our new event ends during the potential conflicted event
+		if((new_start_seconds >= old_start_seconds and 
+			new_start_seconds <= old_end_seconds) or
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			return False
+	return True
 
 def detail(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
@@ -45,6 +133,9 @@ def rsvp(request, event_id):
 	event = get_object_or_404(Event, pk=event_id)
 	user = request.user
 	if event.space_open != 0:
+		if not student_available(request, event_id):
+			messages.error(request, ("Sorry! It looks like you have a scheduling conflict with another event. Please note that there must be at least a minute buffer around events."))
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		event.rsvp_list.add(user)
 		event.space_open -= 1
 		event.save()
@@ -76,13 +167,26 @@ class EventDashboard(TemplateView):
 	def get_context_data(self, **kwargs):
 		request = self.request
 		context = super(EventDashboard, self).get_context_data(**kwargs)
-		not_in_event_list, counter = [], 0
+		not_in_event_list, counter, zoom_time = [], 0, {}
+		now = timezone.make_aware(datetime.now(),timezone.get_default_timezone())
 		if(request.user.is_recruiter):
 			context['event_list'] = Event.objects.filter(
 				main_recruiter = request.user, date__gte = datetime.now() - timedelta(days=1)).order_by('date')[:3]
 		elif(request.user.is_student):
 			context['event_list'] = Event.objects.filter(
 				rsvp_list__in = [request.user], date__gte = datetime.now() - timedelta(days=1)).order_by('date')[:3]
+		for i in context['event_list']:
+			now_seconds = now.hour * 3600 + now.minute * 60
+			info_start_seconds = i.start_time.hour * 3600 + i.start_time.minute * 60
+			info_end_seconds = i.end_time.hour * 3600 + i.end_time.minute * 60
+			if str(i.date) == now.strftime('%Y-%m-%d'):
+				if info_start_seconds <= (now_seconds + 300) and now_seconds < info_end_seconds:
+					zoom_time[i] = True
+				else:
+					zoom_time[i] = False
+			else:
+				zoom_time[i] = False
+		context['zoom_time'] = zoom_time
 
 		for i in Event.objects.filter(date__gte = datetime.now() - timedelta(days=1)).order_by('date'):
 			if counter == 6:
@@ -118,12 +222,26 @@ class MyEventList(TemplateView):
 	def get_context_data(self, **kwargs):
 		request = self.request
 		context = super(MyEventList, self).get_context_data(**kwargs)
+		zoom_time = {}
+		now = timezone.make_aware(datetime.now(),timezone.get_default_timezone())
 		if(request.user.is_recruiter):
 			context['event_list'] = Event.objects.filter(
 				main_recruiter = request.user, date__gte = datetime.now() - timedelta(days=1)).order_by('date')
 		elif(request.user.is_student):
 			context['event_list'] = Event.objects.filter(
 				rsvp_list__in = [request.user], date__gte = datetime.now() - timedelta(days=1)).order_by('date')
+		for i in context['event_list']:
+			now_seconds = now.hour * 3600 + now.minute * 60
+			info_start_seconds = i.start_time.hour * 3600 + i.start_time.minute * 60
+			info_end_seconds = i.end_time.hour * 3600 + i.end_time.minute * 60
+			if str(i.date) == now.strftime('%Y-%m-%d'):
+				if info_start_seconds <= (now_seconds + 300) and now_seconds < info_end_seconds:
+					zoom_time[i] = True
+				else:
+					zoom_time[i] = False
+			else:
+				zoom_time[i] = False
+		context['zoom_time'] = zoom_time
 		return context
 
 class CreateEvent(CreateView):
@@ -138,6 +256,10 @@ class CreateEvent(CreateView):
 		event = form.save()
 		request = self.request
 		event.main_recruiter = request.user
+		# Check for scheduling conflicts
+		if not recruiter_available(request, event):
+			messages.error(request, ('You have a scheduling conflict with another event that you have created previously.'))
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		event.space_open = event.rsvp_capacity
 		with ZoomClient('BLKlHrYJQE2Zfc5VN7YgmQ', 'X729m575QKEgWrymCCNjICxE13TJTfzf43sO') as client:
 			date_str = str(event.date)
