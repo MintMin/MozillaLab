@@ -62,5 +62,6 @@ class Dictionary_Booth(models.Model):
 class KeyVal(models.Model):
 	container = models.ForeignKey(Dictionary_Booth, db_index=True, on_delete=models.CASCADE, null=True)
 	key       = models.CharField(max_length=240, db_index=True)
+	end   = models.CharField(max_length=240, blank=True)
 	#value     = models.OneToOneField(CustomUser, db_index=True, on_delete=models.SET_NULL, null=True)
 	value = models.ForeignKey(CustomUser, db_index=True, on_delete=models.SET_NULL, null=True)

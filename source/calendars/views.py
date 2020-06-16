@@ -59,6 +59,16 @@ class ViewCalendar(TemplateView):
             context['past_booth_list'] = Career_Booth.objects.filter(
                 recruiter = request.user, date__lte=datetime.now() - timedelta(days=1))
             
+            # booths = Career_Booth.objects.filter(
+            #     recruiter = request.user, date__gte=datetime.now() - timedelta(days=1))  # only show future interviews
+            # user_booths, other_booths = [], []
+            # for booth in booths:
+            #     dictionary = get_object_or_404(Dictionary_Booth, career_booth=booth)
+            #     student = KeyVal.objects.filter(container=dictionary, value = None)
+
+            
+            # context['interview_list'] = KeyVal.objects.filter(container=dictionary, key=time, value=None)
+
         elif(request.user.is_student):
             context['event_list'] = Event.objects.filter(
                 rsvp_list__in = [request.user],date__gte = datetime.now()-timedelta(days=1))
@@ -70,99 +80,23 @@ class ViewCalendar(TemplateView):
                 university = student.university, lastdate__gte=datetime.now() - timedelta(days=1)) # last day greater than today
             context['past_career_list'] = Career_Fair.objects.filter(
                 university = student.university, lastdate__lte=datetime.now() - timedelta(days=1))
-    
+
+            # context['interview']  = KeyVal.objects.filter(value = request.user)
+
+            # user = request.user
+            # signup = KeyVal.objects.filter(value = user)[0]
+            # start = signup.key
+            # signup_dic = signup[0]
+            # career_fair = signup_dic.container.career_booth.career_fair
+            # date = signup_dic.container.career_booth.date
+            # duration = signup.container.career_booth.interview_duration
+            # end = start + duration 
+
         return context
 
     # def get_time(self, **kwargs):
     #   request = self.request
     #   context = super(ViewCalendar, self).get_time(**kwargs)
-
-
-
-
-
-# DISPLAY CAREER FAIR/BOOTHS
-# def get_context_data(self, **kwargs):
-#       request = self.request
-#       context = super(CareerFairDashboard, self).get_context_data(**kwargs)
-#       if(request.user.is_student):
-#           student = Student.objects.filter(user = request.user)[0]
-#           context['career_list'] = Career_Fair.objects.filter(
-#               university = student.university, firstdate__gte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#           context['past_career_list'] = Career_Fair.objects.filter(
-#               university = student.university, lastdate__lte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#       elif(request.user.is_recruiter):
-#           recruiter = Recruiter.objects.filter(user = request.user)[0]
-#           context['career_list'] = Career_Fair.objects.filter(
-#               firstdate__gte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#           context['past_career_list'] = Career_Fair.objects.filter(
-#               lastdate__lte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#           # context['joined_fairs'] = Career_Fair.objects.filter()
-#       return context
-
-#   def detail(request, event_id):
-#       career_fair = get_object_or_404(Career_Fair, pk=event_id)
-#       booths = Career_Booth.objects.filter(career_fair = career_fair)
-#       user_booths, other_booths, zoom_time = [], [], {}
-#       if request.user.is_student:
-#           for booth in booths:
-#               dictionary = get_object_or_404(Dictionary_Booth, career_booth=booth)
-#               student = KeyVal.objects.filter(container=dictionary, value=request.user)
-#               if len(student) == 1:
-#                   user_booths.append(booth)
-#                   # student_time = datetime.datetime.strptime(student[0].key, '%H:%M')
-#                   # student_seconds = student_time.hour * 3600 + student_time.minute * 60
-#                   # now = datetime.datetime.now().time()
-#                   # now_seconds = now.hour * 3600 + now.minute * 60
-#                   # booth_seconds = booth.interview_duration * 60
-                    
-#                   # if booth.date == datetime.date.today():
-#                       # if student_seconds <= now_seconds and (now_seconds - student_seconds) < booth_seconds:
-#                           # zoom_time[booth] = True
-                    
-#               else:
-#                   other_booths.append(booth)          
-                    
-#       elif request.user.is_recruiter:
-#           for booth in booths:
-#               if booth.recruiter == request.user:
-#                   user_booths.append(booth)
-#                   # if booth.date == datetime.date.today():
-#                   #   zoom_time[booth] = True
-#                   # else:
-#                   #   zoom_time[booth] = False
-#               else:
-#                   other_booths.append(booth)
-#                   # zoom_time[booth] = False
-
-# class CareerFairDashboard(TemplateView):
-#   template_name = 'career_fair/career_fair_dashboard.html'
-#   def get_context_data(self, **kwargs):
-#       request = self.request
-#       context = super(CareerFairDashboard, self).get_context_data(**kwargs)
-#       if(request.user.is_student):
-#           student = Student.objects.filter(user = request.user)[0]
-#           context['career_list'] = Career_Fair.objects.filter(
-#               university = student.university, firstdate__gte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#           context['past_career_list'] = Career_Fair.objects.filter(
-#               university = student.university, lastdate__lte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#       elif(request.user.is_recruiter):
-#           recruiter = Recruiter.objects.filter(user = request.user)[0]
-#           context['career_list'] = Career_Fair.objects.filter(
-#               firstdate__gte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#           context['past_career_list'] = Career_Fair.objects.filter(
-#               lastdate__lte=datetime.datetime.now() - timedelta(days=1)
-#           ).order_by('firstdate')
-#           # context['joined_fairs'] = Career_Fair.objects.filter()
-#       return context
-
 
 
 

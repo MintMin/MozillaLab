@@ -218,8 +218,11 @@ class CreateBooth(CreateView):
 				return HttpResponseRedirect('/career_fair/error')
 
 		booth.career_fair = fair
+		
 		# Set up booth_name
-		booth.booth_name = booth.company + " Infosession"
+		if booth.booth_name == None:
+			booth.booth_name = booth.company + "Booth" 
+
 		""" code below will create dictionary for signup """
 
 		dictionary = Dictionary_Booth.objects.create(
@@ -232,8 +235,15 @@ class CreateBooth(CreateView):
 			)
 		)
 
+		""" Keyval values"""
 		for time in signup_slots:
-			KeyVal.objects.create(container=dictionary, key=time, value=None)
+			t = datetime.datetime.strptime(time,'%H:%M') 
+			time_end = (t + datetime.timedelta(minutes=booth.interview_duration))
+			time_end = time_end.strftime('%H:%M')
+			KeyVal.objects.create(container=dictionary, key=time, end=time_end, value=None)
+
+		# for time in signup_slots:
+		# 	KeyVal.objects.create(container=dictionary, key=time, value=None)
 
 		"""Here is the Zoom link creation"""
 		with ZoomClient('BLKlHrYJQE2Zfc5VN7YgmQ', 'X729m575QKEgWrymCCNjICxE13TJTfzf43sO') as client:

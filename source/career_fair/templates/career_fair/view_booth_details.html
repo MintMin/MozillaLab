@@ -4,6 +4,7 @@
 
 {% block content %}
 
+    <p>University: {{ booth.university }} </p>    
     <p>Company: {{ booth.company }} </p>
     <p>Time: {{ booth.date }} from {{ booth.time_start }} to {{ booth.time_end }}</p>
     <p>Interview Duration: {{ booth.interview_duration }} minutes
@@ -26,8 +27,8 @@
                 {% endif %}
             </p>
         {% endfor %}
-        {% if request.user.is_recruiter %}
+        <!-- {% if request.user.is_recruiter %}
             <p> <button class="btn btn-danger" onclick="location.href='{% url 'career_fair:delete_booth_confirmation' booth.id %}'">Delete Event!</button> </p>
-        {% endif %}
+        {% endif %} -->
 {% endblock %}
 
