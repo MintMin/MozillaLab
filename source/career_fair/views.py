@@ -199,6 +199,7 @@ class CreateBooth(CreateView):
 		recruiter = Recruiter.objects.filter(user = request.user)[0]
 		# Check for scheduling conflicts
 		if not recruiter_available(request, booth):
+			booth.delete()
 			messages.error(request, ('You have a scheduling conflict with another event that you have created previously.'))
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		# Check for career fairs, if none exist, create one
@@ -215,7 +216,9 @@ class CreateBooth(CreateView):
 			fair = existing_fairs[0]
 			existing_booths = Career_Booth.objects.filter(career_fair = fair, company = booth.company)
 			if(len(existing_booths) > 0):
-				return HttpResponseRedirect('/career_fair/error')
+				booth.delete()
+				messages.error(request, ('You have a scheduling conflict with another event that you have created previously.'))
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 		booth.career_fair = fair
 		
@@ -343,7 +346,7 @@ class CareerFairDashboard(TemplateView):
 		if(request.user.is_student):
 			student = Student.objects.filter(user = request.user)[0]
 			context['career_list'] = Career_Fair.objects.filter(
-				university = student.university, firstdate__gte=datetime.datetime.now() - timedelta(days=1)
+				university = student.university, lastdate__gte=datetime.datetime.now() - timedelta(days=1)
 			).order_by('firstdate')
 			context['past_career_list'] = Career_Fair.objects.filter(
 				university = student.university, lastdate__lte=datetime.datetime.now() - timedelta(days=1)
@@ -351,11 +354,12 @@ class CareerFairDashboard(TemplateView):
 		elif(request.user.is_recruiter):
 			recruiter = Recruiter.objects.filter(user = request.user)[0]
 			context['career_list'] = Career_Fair.objects.filter(
-				firstdate__gte=datetime.datetime.now() - timedelta(days=1)
+				lastdate__gte=datetime.datetime.now() - timedelta(days=1)
 			).order_by('firstdate')
 			context['past_career_list'] = Career_Fair.objects.filter(
 				lastdate__lte=datetime.datetime.now() - timedelta(days=1)
 			).order_by('firstdate')
+			print(datetime.datetime.now() - timedelta(days=1))
 			# context['joined_fairs'] = Career_Fair.objects.filter()
 		return context
 

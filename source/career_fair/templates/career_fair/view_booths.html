@@ -21,10 +21,15 @@
               <div class="card border-info mb-3" style="max-width: 20rem;">
                 <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
                 <!-- <div class="card-header">Header</div> -->
-              
+                  {% if booth.booth_name %}
                   <div class="card-body text-dark">
                       <h5 class="card-title bg-info text-white ">{{booth.booth_name}}</h5>
                       <p class="card-text">{{booth.recruiter}}</p>
+                  {% else %}
+                  <div class="card-body text-dark">
+                      <h5 class="card-title bg-info text-white ">{{booth.company}}</h5>
+                      <p class="card-text">{{booth.recruiter}}</p>
+                  {% endif %}
                       
 
                       <ul class="list-group list-group-flush">
