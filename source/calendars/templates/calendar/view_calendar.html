@@ -8,8 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" rel="stylesheet">
-    <!-- <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>  -->
-
+    
+    <!-- Icon database -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">  
 
 {% endblock %} -->
 
@@ -23,10 +24,10 @@
                 Event Categories: &nbsp;&nbsp;
             </p>
             <div style="float:left">
-                <button type="button" class="btn btn-secondary btn-sm">Past Event</button>
                 <button type="button" class="btn btn-primary btn-sm">Info-session</button>
                 {% if request.user.is_recruiter %}
                 <button type="button" class="btn btn-info btn-sm">Career Booths</button>
+                <button type="button" class="btn btn-outline-info btn-sm">Booked Interview</button>
                 {% elif request.user.is_student %}
                 <button type="button" class="btn btn-info btn-sm">Interviews</button>
                 {% endif %}
@@ -36,8 +37,8 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {% if request.user.is_recruiter %}
             <div style="float:right" >
-                <button type="button" onclick="location.href='{% url 'event:create_event' %}'" class="btn btn-outline-success">Create Infosession</button>
-                <button type="button" onclick="location.href='{% url 'career_fair:create-booth' %}'" class="btn btn-outline-success">Create Career Booth</button>
+                <button type="button" onclick="location.href='{% url 'event:create_event' %}'" class="btn btn-light"> Create Infosession</button>
+                <button type="button" onclick="location.href='{% url 'career_fair:create-booth' %}'" class="btn btn-light"><i class="fa fa-plus" aria-hidden="true"></i> Create Career Booth</button>
             </div>
             {% endif %}
 
@@ -68,6 +69,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script> 
 
+    <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script> 
+
     
     <script>
 
@@ -87,6 +90,7 @@
             timeZone: "local",
             nowIndicator: true,
 
+            // Event Popover
             // eventLimit: true, // for all non-TimeGrid views
             //     views: {
             //         timeGrid: {
@@ -96,13 +100,17 @@
 
 
             eventTextColor: 'white',
+
+
             events: [
                     {% for i in event_list %}
                         {
                             title: '{{ i.title }}',
+                            // description: '{{ i.title}}',
+                            description: 'description for All Day Event',
                             start: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.start_time|date:"H:i:s"}}',   // ISO8061 format
                             end: '{{ i.date|date:"Y-m-d" }}'+'T'+'{{ i.end_time|date:"H:i:s"}}',
-                            url: "{% url 'event:detail' i.id %}",                                         // default color: #4c86d2  bootstrap blue:#007BFF
+                            url: "{% url 'event:detail' i.id %}",                                      // default color: #4c86d2  bootstrap blue:#007BFF
                         },
                     {% endfor %}
 
@@ -142,7 +150,7 @@
                             title: '{{ i.booth_name }}',
                             start: '{{ i.date|date:"Y-m-d" }}',   // ISO8061 format
                             url: "{% url 'career_fair:booth_detail' i.id i.company%}",
-                            color: '#16A2B8 ',
+                            color: '#16A2B8',
                         },
                     {% endfor %}
 
@@ -173,9 +181,9 @@
                             title: '{{ i.value}}',
                             start: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.key}}'+':00',   
                             end: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.end}}'+':00', 
-                            color: '#16A2B8',
-                            // borderColor  = '#16A2B8',
-                            // textColor = 'black',
+                            color: 'white',
+                            borderColor: '#16A2B8 ',
+                            textColor: '#16A2B8 ',
                         },
                     {% endfor %}
 
@@ -190,33 +198,22 @@
 
                     {% endif %}
 
-
-
                 
             ],
             
-            // {% if request.user.is_recruiter %}
-            // customButtons: {
+            // / customButtons: {
             //     AddEvent: {
             //         text: 'Create An Event',
             //         click: function (){
             //             // location.href="{% url 'event:create_event' %}"；
             //             alert('RUN!')
             //         }
-            //     },
-
-            // },
+            //     },/ {% if request.user.is_recruiter %}
+            
             // {% endif %}
-            customButtons: {
-                custom1: {
-                    text: 'custom 1',
-                    click: function() {
-                    // alert('clicked custom button 1!');
-                    }
-                },
-            }
+            
 
-            // SHOW EVENT SUMMARY
+            // Event description pop out (currently not working...)
             // eventRender: function(info) {
             //     var tooltip = new Tooltip(info.el, {
             //         title: info.event.extendedProps.description,
@@ -226,17 +223,29 @@
             //     });
             // },
 
-            
-            // events: [
-            
-            // {
-            //     title: 'Click for Google',
-            //     url: 'http://google.com/',
-            //     start: '2020-05-28'
-            // }
-            // ]
+            // eventMouseover: function(calEvent, jsEvent) {
+            //     var tooltip = '<div class="tooltipevent" style="width:100px;height:100px;background:#ccc;position:absolute;z-index:10001;">' + calEvent.title + '</div>';
+            //     var $tooltip = $(tooltip).appendTo('body');
 
-            
+            //     $(this).mouseover(function(e) {
+            //         $(this).css('z-index', 10000);
+            //         $tooltip.fadeIn('500');
+            //         $tooltip.fadeTo('10', 1.9);
+            //     }).mousemove(function(e) {
+            //         $tooltip.css('top', e.pageY + 10);
+            //         $tooltip.css('left', e.pageX + 20);
+            //     });
+            // },
+
+            // eventMouseout: function(calEvent, jsEvent) {
+            //     $(this).css('z-index', 8);
+            //     $('.tooltipevent').remove();
+            // },
+
+            // eventRender: function(event, element) {
+            //     // element.attr('title', event.tooltip);
+            // },
+
           });
   
           calendar.render();

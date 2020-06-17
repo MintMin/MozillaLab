@@ -10,7 +10,8 @@
         <h1>Upcoming Career Fairs
 
         {% if request.user.is_recruiter %}
-          <a href="{% url 'career_fair:create-booth'%}" class="btn btn-info"> Create Booth</a>
+          <a href="{% url 'career_fair:create-booth'%}" class="btn btn-outline-dark btn-sm">
+            <i class="fa fa-plus" aria-hidden="true"></i> Create Booth</a>
         {% endif %}
 
         </h1> 

@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'search',
     'calendars',
     'user_profile',
-    'interview',
-    'infosession',
     'career_fair',
 ]
 

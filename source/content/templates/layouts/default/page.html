@@ -16,13 +16,13 @@
 
     <link rel="icon" href="{% static 'favicon.ico' %}">
 
-    <title>Simple Django Login and Registration</title>
+    <title> Virtual Career Fair</title>
 
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">  
     
-        {% block css %} {% endblock %}
+    {% block css %} {% endblock %}
 
 </head>
 
@@ -30,7 +30,10 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand" href="/">{% trans 'Home' %}</a>
+    <a class="navbar-brand" href="/">
+        <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
+        {% trans ' Home' %}
+    </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault">
         <span class="navbar-toggler-icon"></span>
@@ -41,6 +44,7 @@
             {% if request.user.is_authenticated %}
                 <div class ="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
                         Settings
                     </button> 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -61,10 +65,16 @@
                 </li> -->
 
                 <li class="nav-item">
-                        <a class="nav-link" href="{% url 'calendars:view_calendar' %}">{% trans 'Calendar' %}</a>
+                        <a class="nav-link" href="{% url 'calendars:view_calendar' %}">
+                            <!-- <i class="fa fa-calendar" aria-hidden="true"></i> -->
+                            {% trans ' Calendar' %}
+                        </a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="{% url 'event:event_dashboard' %}">{% trans 'Infosessions' %}</a>
+                        <a class="nav-link" href="{% url 'event:event_dashboard' %}">
+                            <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
+                            {% trans ' Infosessions' %}
+                        </a>
                 </li>
                 <li class="nav-item">
                         <a class="nav-link" href="{% url 'career_fair:career_fair_dashboard' %}">{% trans 'Career Fair' %}</a>
@@ -102,7 +112,10 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'change_language' %}">{% trans 'Change language' %}</a>
+                <a class="nav-link" href="{% url 'change_language' %}">
+                    {% trans 'Change language' %}
+                    <i class="fa fa-language" aria-hidden="true"></i>
+                </a>
             </li>
 
         </ul>
