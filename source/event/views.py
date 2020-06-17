@@ -96,7 +96,8 @@ def recruiter_available(request, infosession):
 		# Second case is if our new event ends during the potential conflicted event
 		if((new_start_seconds >= old_start_seconds and 
 			new_start_seconds <= old_end_seconds) or
-			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds) or
+			(new_start_seconds < old_start_seconds and new_end_seconds > old_end_seconds)):
 			return False
 	# Next, check conflicts with infosessions
 	current_infosessions = Event.objects.filter(main_recruiter = recruiter, date = date)
@@ -113,9 +114,11 @@ def recruiter_available(request, infosession):
 		old_end_seconds = infosession.end_time.hour * 3600 + infosession.end_time.minute * 60
 		# First case is if our new event starts during the potential conflicted event
 		# Second case is if our new event ends during the potential conflicted event
+		# Third case is if our new event overlaps both beginning and end the potential conflicted events same at line 99
 		if((new_start_seconds >= old_start_seconds and 
 			new_start_seconds <= old_end_seconds) or
-			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds)):
+			(new_end_seconds >= old_start_seconds and new_end_seconds <= old_end_seconds) or
+			(new_start_seconds < old_start_seconds and new_end_seconds > old_end_seconds)):
 			return False
 	return True
 
@@ -258,6 +261,7 @@ class CreateEvent(CreateView):
 		event.main_recruiter = request.user
 		# Check for scheduling conflicts
 		if not recruiter_available(request, event):
+			event.delete()
 			messages.error(request, ('You have a scheduling conflict with another event that you have created previously.'))
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		event.space_open = event.rsvp_capacity

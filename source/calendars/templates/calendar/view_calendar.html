@@ -87,6 +87,14 @@
             timeZone: "local",
             nowIndicator: true,
 
+            // eventLimit: true, // for all non-TimeGrid views
+            //     views: {
+            //         timeGrid: {
+            //         eventLimit: 8 // adjust to 6 only for timeGridWeek/timeGridDay
+            //         }
+            // },
+
+
             eventTextColor: 'white',
             events: [
                     {% for i in event_list %}
@@ -147,6 +155,40 @@
                         },
                     {% endfor %}
 
+
+                    {% if request.user.is_student %}
+                    {% for i in interview %}
+                        {
+                            title: '{{ i.container.career_booth.company }}'+'@'+ '{{ i.container.career_booth.university }}',
+                            start: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.key}}'+':00',   
+                            end: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.end}}'+':00', 
+                            color: '#16A2B8',
+                        },
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if request.user.is_recruiter %}
+                    {% for i in interview_booked %}
+                        {
+                            title: '{{ i.value}}',
+                            start: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.key}}'+':00',   
+                            end: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.end}}'+':00', 
+                            color: '#16A2B8',
+                            // borderColor  = '#16A2B8',
+                            // textColor = 'black',
+                        },
+                    {% endfor %}
+
+                    {% for i in interview_left %}
+                        {
+                            title: '{{ i.value}}',
+                            start: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.key}}'+':00',   
+                            end: '{{ i.container.career_booth.date|date:"Y-m-d" }}'+'T'+'{{ i.end}}'+':00', 
+                            color: '#c6cfd7',
+                        },
+                    {% endfor %}
+
+                    {% endif %}
 
 
 

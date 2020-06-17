@@ -27,8 +27,17 @@
                 {% endif %}
             </p>
         {% endfor %}
-        <!-- {% if request.user.is_recruiter %}
-            <p> <button class="btn btn-danger" onclick="location.href='{% url 'career_fair:delete_booth_confirmation' booth.id %}'">Delete Event!</button> </p>
-        {% endif %} -->
+        
+        {% if request.user.is_recruiter %}
+            <button class="btn btn-danger" onclick="location.href='{% url 'career_fair:delete_booth_confirmation' booth.id %}'">Delete Event!</button> 
+        {% endif %}
+
+        <script>
+            function goBack()
+            {
+                window.history.back()
+            }
+        </script>
+        <input class="btn btn-primary" type="button" value="<<Back" onclick="goBack()">
 {% endblock %}
 

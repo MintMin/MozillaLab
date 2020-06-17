@@ -59,15 +59,9 @@ class ViewCalendar(TemplateView):
             context['past_booth_list'] = Career_Booth.objects.filter(
                 recruiter = request.user, date__lte=datetime.now() - timedelta(days=1))
             
-            # booths = Career_Booth.objects.filter(
-            #     recruiter = request.user, date__gte=datetime.now() - timedelta(days=1))  # only show future interviews
-            # user_booths, other_booths = [], []
-            # for booth in booths:
-            #     dictionary = get_object_or_404(Dictionary_Booth, career_booth=booth)
-            #     student = KeyVal.objects.filter(container=dictionary, value = None)
+            context['interview_booked'] = KeyVal.objects.exclude(value=None)
+            context['interview_left'] = KeyVal.objects.filter(value=None)
 
-            
-            # context['interview_list'] = KeyVal.objects.filter(container=dictionary, key=time, value=None)
 
         elif(request.user.is_student):
             context['event_list'] = Event.objects.filter(
@@ -81,16 +75,7 @@ class ViewCalendar(TemplateView):
             context['past_career_list'] = Career_Fair.objects.filter(
                 university = student.university, lastdate__lte=datetime.now() - timedelta(days=1))
 
-            # context['interview']  = KeyVal.objects.filter(value = request.user)
-
-            # user = request.user
-            # signup = KeyVal.objects.filter(value = user)[0]
-            # start = signup.key
-            # signup_dic = signup[0]
-            # career_fair = signup_dic.container.career_booth.career_fair
-            # date = signup_dic.container.career_booth.date
-            # duration = signup.container.career_booth.interview_duration
-            # end = start + duration 
+            context['interview']  = KeyVal.objects.filter(value = request.user)
 
         return context
 
