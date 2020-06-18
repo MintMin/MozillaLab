@@ -1,2 +1,2 @@
-web: gunicorn source.wsgi --log-file -
+web: gunicorn MozillaLab.wsgi --log-file -
 
