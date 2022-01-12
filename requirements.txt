@@ -54,7 +54,7 @@ pbr==5.4.5
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==7.1.1
-pipenv==2018.11.26
+pipenv==2022.1.8
 prometheus-client==0.7.1
 psycopg2-binary==2.7.7
 ptyprocess==0.6.0
